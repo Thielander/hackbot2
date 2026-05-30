@@ -92,6 +92,24 @@ hackbot2 -w c -z 1 example.com
 hackbot2 -A https://example.com/some/path
 ```
 
+## Language / Sprache
+
+HackBot2 supports **English** (default) and **German**.
+
+Switch to German by creating `~/.hackbot2rc`:
+
+```bash
+echo "lang=de" > ~/.hackbot2rc
+```
+
+Switch back to English:
+
+```bash
+echo "lang=en" > ~/.hackbot2rc
+```
+
+A sample config file `hackbot2.conf` is included in the repository.
+
 ## Output
 
 Results are written to `output.<host>` by default. Use `-O <file>` to specify a path.

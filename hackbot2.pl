@@ -35,6 +35,523 @@ use FindBin qw($Bin);
 my $ssl_available = eval { require IO::Socket::SSL; IO::Socket::SSL->import(); 1 };
 
 # --------------------------------------------------------------------------
+# Internationalisation (i18n)
+# --------------------------------------------------------------------------
+my %LANG = (
+  en => {
+    # General
+    checking_host       => 'Checking named host {1} ...',
+    resolving           => 'resolving {1} ...',
+    resolved_to         => 'Resolved to: {1}',
+    no_resolve          => '{1} does not resolve, skipping.',
+    range_scan          => 'Range scan from {1} to {2}',
+    checking_ip         => 'Checking {1} ...',
+    scan_done           => 'All scans done. HackBot {1}',
+    exiting             => '---> Exiting.',
+    separator           => '--->',
+    # Banner
+    banner_based        => 'Based on HackBot (c) 2000-2002 Marco van Berkum',
+    banner_modified     => 'Modified and extended by Alexander Thiele, 2026',
+    # SSH
+    ssh_header          => 'Checking for SSH',
+    no_ssh              => 'No SSH',
+    ssh_banner          => 'SSH banner: {1}',
+    warn_sshv1          => 'WARNING: SSHv1 detected - insecure, upgrade required!',
+    # FTP
+    ftp_header          => 'Checking for FTP',
+    no_ftp              => 'No FTP',
+    ftp_banner          => 'FTP banner: {1}',
+    ftp_anon_allowed    => 'Anonymous login ALLOWED',
+    ftp_anon_denied     => 'Anonymous login not allowed',
+    ftp_upload_found    => 'Upload directory found',
+    ftp_write_yes       => 'Write access to upload directory!',
+    ftp_write_no        => 'No write access to upload directory',
+    # SMTP
+    mta_header          => 'MTA - Relay / VRFY / EXPN check',
+    no_mta              => 'No MTA',
+    mta_relay_open      => 'Open relay detected!',
+    mta_relay_closed    => 'Relaying not allowed',
+    mta_vrfy_on         => 'VRFY enabled: {1}',
+    mta_vrfy_off        => 'VRFY disabled',
+    mta_expn_on         => 'EXPN enabled: {1}',
+    mta_expn_off        => 'EXPN disabled',
+    # DNS
+    dns_header          => 'DNS scan',
+    no_dns              => 'No DNS server on port 53',
+    dns_bind_ver        => 'BIND version: {1}',
+    dns_no_ver          => 'DNS port open but no version returned',
+    dns_records_for     => 'DNS records for {1}',
+    dns_ipv6_ok         => '[OK] IPv6 (AAAA) supported',
+    dns_ipv6_missing    => '[!]  No AAAA record — IPv6 not supported',
+    dns_ipv6_reach      => '[OK] IPv6 address {1} reachable on port 80',
+    dns_ipv6_noreach    => '[i]  IPv6 address {1} not reachable on port 80',
+    dns_caa_ok          => '[OK] CAA records present — certificate issuance restricted',
+    dns_caa_missing     => '[!]  No CAA record — any CA can issue certificates for this domain',
+    dns_tlsa_ok         => '[OK] DANE/TLSA record found: {1}',
+    dns_tlsa_missing    => '[i]  No DANE/TLSA record (optional but good for email MTAs)',
+    # HTTPS / TLS
+    https_header        => 'HTTPS / TLS scan (port 443)',
+    no_https            => 'No HTTPS on port 443',
+    tls_version         => 'TLS version:  {1}',
+    http_version        => 'HTTP version: {1}',
+    tls_cipher          => 'Cipher suite: {1}',
+    tls_cert            => 'Certificate:  {1}',
+    tls_issuer          => 'Issuer:       {1}',
+    tls_sans            => 'SANs:         {1}',
+    tls_valid_until     => 'Valid until:  {1}',
+    tls_days_ok         => '[OK] {1} days remaining',
+    tls_days_warn       => '[!] Certificate expires in {1} days',
+    tls_days_high       => '[HIGH] Certificate expires in {1} days!',
+    tls_expired         => '[CRITICAL] Certificate EXPIRED {1} days ago!',
+    tls_self_signed     => '[!] Self-signed certificate!',
+    tls_ok_13           => '[OK] TLS 1.3',
+    tls_ok_12           => '[OK] TLS 1.2',
+    tls_deprecated      => '[!] Deprecated TLS version ({1}) - TLS 1.2+ required!',
+    tls_weak_cipher     => '[!] Weak cipher suite ({1})',
+    no_ssl_module       => 'IO::Socket::SSL not installed - install with: cpan IO::Socket::SSL',
+    # Web
+    web_header          => 'Checking webserver on port {1}',
+    no_web              => 'No webserver on port {1}',
+    web_found           => 'Webserver found',
+    web_server          => 'Server: {1}',
+    web_http_only       => '[!] Server redirects to plain HTTP — no HTTPS in use!',
+    web_http_hint       => '    Security header checks will run on HTTP (no encryption)',
+    http_opts_header    => 'HTTP OPTIONS',
+    http_dangerous      => 'WARNING: Potentially dangerous HTTP methods enabled: {1}',
+    # Security headers
+    sec_header          => 'HTTP Security Headers',
+    sec_via             => '(via {1})',
+    sec_hsts_ok         => '[OK] Strict-Transport-Security: {1}',
+    sec_hsts_miss       => '[!]  HSTS missing - HTTPS not enforced',
+    sec_csp_ok          => '[OK] Content-Security-Policy: {1}',
+    sec_csp_miss        => '[!]  CSP missing - XSS risk',
+    sec_frame_ok        => '[OK] X-Frame-Options: {1}',
+    sec_frame_miss      => '[!]  Clickjacking protection missing',
+    sec_mime_ok         => '[OK] X-Content-Type-Options: {1}',
+    sec_mime_miss       => '[!]  MIME sniffing protection missing',
+    sec_ref_ok          => '[OK] Referrer-Policy: {1}',
+    sec_ref_miss        => '[!]  Referrer policy not set',
+    sec_perm_ok         => '[OK] Permissions-Policy: {1}',
+    sec_perm_miss       => '[!]  Permissions policy not set',
+    # Cookies
+    cookie_header       => 'Cookie Security Flags',
+    no_cookies          => 'No Set-Cookie headers found',
+    cookie_ok           => '[OK] {1}: Secure + HttpOnly + SameSite set',
+    cookie_issues       => '[!] {1}: {2}',
+    cookie_secure_miss  => 'Secure missing',
+    cookie_httponly_miss=> 'HttpOnly missing',
+    cookie_samesite_none=> 'SameSite=None (CSRF risk)',
+    cookie_samesite_miss=> 'SameSite missing',
+    # CORS
+    cors_header         => 'CORS Policy',
+    cors_wildcard       => '[!] {1}: ACAO=* — any origin allowed (acceptable for public APIs)',
+    cors_crit_wildcard  => '[CRITICAL] {1}: ACAO=* with Credentials=true — misconfigured!',
+    cors_reflects       => '[HIGH] {1}: reflects arbitrary Origin — {2}',
+    cors_crit_reflects  => '[CRITICAL] {1}: reflects arbitrary Origin + Credentials=true — session hijacking possible!',
+    cors_ok             => '[OK] {1}: ACAO={2}',
+    # Redirect chain
+    redirect_header     => 'Redirect Chain',
+    redirect_step       => '  {1}. [{2}]  {3}',
+    redirect_https_ok   => '[OK] Final destination uses HTTPS',
+    redirect_http_warn  => '[!]  Final destination is plain HTTP!',
+    # CMS
+    cms_header          => 'CMS / Framework Detection',
+    cms_detected        => 'Detected: {1}',
+    cms_none            => 'No CMS/framework identified',
+    # Tech stack
+    stack_header        => 'Technology Stack',
+    stack_none          => 'No additional stack info',
+    # Error page
+    errpage_header      => 'Error Page Fingerprint',
+    errpage_status      => 'HTTP {1} on unknown path',
+    errpage_hints       => 'Framework hints: {1}',
+    errpage_none        => 'No framework identified from error page',
+    # Mixed content
+    mixed_header        => 'Mixed Content Check',
+    mixed_no_https      => 'HTTPS not available, skipping',
+    mixed_found         => '[!] {1} mixed content reference(s) found:',
+    mixed_ok            => '[OK] No mixed content detected',
+    # OS detection
+    os_header           => 'OS Detection',
+    os_none             => 'No OS indicators found',
+    nmap_not_found      => 'Nmap not installed - skipping TCP/IP stack fingerprint',
+    nmap_install        => '  Install: sudo apt install nmap   (Debian/Ubuntu/Raspberry Pi OS)',
+    nmap_root_hint      => '  For full OS detection run as root: sudo perl hackbot2 -n <host>',
+    nmap_root_mode      => 'Running nmap OS scan (root)...',
+    nmap_sv_mode        => 'Running nmap -sV (run as root for full -O OS detection)...',
+    ping_ttl            => '{1}  [ping TTL={2}, orig={3}, ~{4} hops]',
+    # Email security
+    email_header        => 'Email Security: {1}',
+    spf_ok              => '       [OK] -all: unauthorized senders rejected',
+    spf_soft            => '       [~]  ~all: soft fail, marked as spam',
+    spf_weak            => '       [!]  +all/?all: allows spoofing!',
+    spf_missing         => 'SPF:   [!] No SPF record — domain can be spoofed!',
+    dmarc_reject        => '       [OK] p=reject: spoofed mail rejected',
+    dmarc_quarantine    => '       [~]  p=quarantine: spoofed mail → spam',
+    dmarc_none          => '       [!]  p=none: monitoring only, no enforcement!',
+    dmarc_missing       => 'DMARC: [!] No DMARC record found!',
+    dkim_testing        => 'DKIM:  Testing {1} common selectors...',
+    dkim_found          => "DKIM:  [OK] selector '{1}': {2}",
+    dkim_missing        => 'DKIM:  [!] No DKIM records found for common selectors',
+    mta_sts_ok          => 'MTA-STS: [OK] configured',
+    mta_sts_miss        => 'MTA-STS: [i] not configured (optional but recommended)',
+    # Subdomain scan
+    subdomain_header    => 'Subdomain scan: {1}',
+    wildcard_dns        => 'Wildcard DNS detected: *.{1} -> {2} (false positives will be filtered)',
+    ct_querying         => 'Querying Certificate Transparency logs (crt.sh)...',
+    ct_found            => 'crt.sh: {1} unique subdomains found',
+    ct_ssl_needed       => 'crt.sh unreachable (IO::Socket::SSL required)',
+    axfr_trying         => 'Attempting DNS zone transfer (AXFR)...',
+    axfr_ok             => 'AXFR succeeded',
+    axfr_refused        => 'AXFR refused (normal)',
+    bruteforce_scan     => 'DNS brute-force ({1} names)...',
+    bruteforce_found    => 'Brute-force: {1} new subdomains found',
+    subdomain_total     => 'Total: {1} confirmed subdomains',
+    no_subdomains       => 'No subdomains found',
+    no_subdomain_wc     => 'No subdomains found (all responses were wildcard: {1})',
+    subdomain_header_tbl=> 'Subdomain',
+    subdomain_col_src   => 'Source',
+    subdomain_col_ip    => 'IP',
+    # Geolocation
+    geo_header          => 'Geolocation for {1}',
+    geo_private         => 'Private/reserved address, skipping geolocation',
+    geo_no_reach        => 'Cannot reach ip-api.com',
+    # Port scan
+    port_header         => 'Port scan',
+    no_open_ports       => 'No common ports open',
+    # Service banners
+    svc_header          => 'Service Banner Scan',
+    svc_complete        => 'Service banner scan complete',
+    svc_no_auth         => ' — no auth required!',
+    # Disclosure scan
+    disc_header         => 'Disclosure / common file scan',
+    disc_no_db          => 'Disclosure database not found ({1})',
+    disc_scanning       => 'scanning {1}/{2}: {3}',
+    disc_no_findings    => 'No sensitive files found',
+    disc_summary        => 'Summary: {1}',
+    disc_url            => 'URL:  {1}',
+    disc_category       => 'Category: {1} | {2}',
+    disc_preview        => 'Preview:  {1}',
+    # Whois
+    whois_header        => 'Whois lookup',
+    whois_ripe          => 'Whois @RIPE',
+    whois_arin          => 'Whois @ARIN',
+    whois_apnic         => 'Whois @APNIC',
+    whois_unknown       => 'Unknown registrar, skipping whois',
+    whois_reserved      => 'Reserved by IANA',
+    # DNSBL
+    dnsbl_header        => 'DNSBL Spam Check',
+    dnsbl_private       => 'Private address, skipping DNSBL check',
+    dnsbl_listed        => 'LISTED on {1}',
+    dnsbl_clean         => 'Clean on {1}',
+    # Identd
+    ident_header        => 'Identd',
+    ident_none          => 'No Identd on {1}, skipping full scan',
+    ident_col           => "Port\tState\tService\tOwner",
+    # Telnet
+    telnet_header       => 'Telnet fingerprint',
+    no_telnet           => 'No telnet',
+    telnet_fp           => 'Fingerprint: {1}',
+    telnet_os           => 'OS guess: {1} (submitted by {2})',
+    telnet_not_found    => 'Fingerprint not in database',
+    telnet_no_db        => 'Fingerprint database not found ({1}), skipping',
+    # X11
+    x11_header          => 'X11 access check (port 6000)',
+    no_x11              => 'No X11',
+    x11_allowed         => 'X11 access ALLOWED - no authentication required!',
+    x11_denied          => 'X11 access not allowed',
+    # CGI scan
+    cgi_header          => 'CGI vulnerability scan (port {1})',
+    cgi_no_db           => 'CGI database not found (expected: {1})',
+    cgi_found           => 'FOUND: {1}',
+    # Proxy
+    proxy_test          => 'Proxy responds, testing...',
+    proxy_ok            => 'Proxying allowed',
+    proxy_fail          => 'Proxying not allowed, continuing without proxy',
+    proxy_noconnect     => 'Proxy connect failed, scanning without proxy',
+    # JSON output
+    json_written        => 'JSON results written to {1}',
+    # Config
+    lang_unknown        => 'Unknown language "{1}", using English',
+  },
+  de => {
+    # General
+    checking_host       => 'Prüfe Host {1} ...',
+    resolving           => 'löse {1} auf ...',
+    resolved_to         => 'Aufgelöst zu: {1}',
+    no_resolve          => '{1} nicht auflösbar, wird übersprungen.',
+    range_scan          => 'Bereichsscan von {1} bis {2}',
+    checking_ip         => 'Prüfe {1} ...',
+    scan_done           => 'Alle Scans abgeschlossen. HackBot {1}',
+    exiting             => '---> Beende.',
+    separator           => '--->',
+    # Banner
+    banner_based        => 'Basiert auf HackBot (c) 2000-2002 Marco van Berkum',
+    banner_modified     => 'Erweitert von Alexander Thiele, 2026',
+    # SSH
+    ssh_header          => 'SSH-Prüfung',
+    no_ssh              => 'Kein SSH',
+    ssh_banner          => 'SSH-Banner: {1}',
+    warn_sshv1          => 'WARNUNG: SSHv1 erkannt — unsicher, bitte aktualisieren!',
+    # FTP
+    ftp_header          => 'FTP-Prüfung',
+    no_ftp              => 'Kein FTP',
+    ftp_banner          => 'FTP-Banner: {1}',
+    ftp_anon_allowed    => 'Anonymer Login ERLAUBT',
+    ftp_anon_denied     => 'Anonymer Login nicht erlaubt',
+    ftp_upload_found    => 'Upload-Verzeichnis gefunden',
+    ftp_write_yes       => 'Schreibzugriff auf Upload-Verzeichnis!',
+    ftp_write_no        => 'Kein Schreibzugriff auf Upload-Verzeichnis',
+    # SMTP
+    mta_header          => 'MTA — Relay / VRFY / EXPN Prüfung',
+    no_mta              => 'Kein MTA',
+    mta_relay_open      => 'Offenes Relay erkannt!',
+    mta_relay_closed    => 'Relaying nicht erlaubt',
+    mta_vrfy_on         => 'VRFY aktiv: {1}',
+    mta_vrfy_off        => 'VRFY deaktiviert',
+    mta_expn_on         => 'EXPN aktiv: {1}',
+    mta_expn_off        => 'EXPN deaktiviert',
+    # DNS
+    dns_header          => 'DNS-Scan',
+    no_dns              => 'Kein DNS-Server auf Port 53',
+    dns_bind_ver        => 'BIND-Version: {1}',
+    dns_no_ver          => 'DNS-Port offen, aber keine Version zurückgegeben',
+    dns_records_for     => 'DNS-Einträge für {1}',
+    dns_ipv6_ok         => '[OK] IPv6 (AAAA) wird unterstützt',
+    dns_ipv6_missing    => '[!]  Kein AAAA-Eintrag — kein IPv6',
+    dns_ipv6_reach      => '[OK] IPv6-Adresse {1} auf Port 80 erreichbar',
+    dns_ipv6_noreach    => '[i]  IPv6-Adresse {1} auf Port 80 nicht erreichbar',
+    dns_caa_ok          => '[OK] CAA-Einträge vorhanden — Zertifikatsvergabe eingeschränkt',
+    dns_caa_missing     => '[!]  Kein CAA-Eintrag — jede CA kann Zertifikate ausstellen',
+    dns_tlsa_ok         => '[OK] DANE/TLSA-Eintrag gefunden: {1}',
+    dns_tlsa_missing    => '[i]  Kein DANE/TLSA-Eintrag (optional, aber empfohlen für Mail)',
+    # HTTPS / TLS
+    https_header        => 'HTTPS / TLS-Scan (Port 443)',
+    no_https            => 'Kein HTTPS auf Port 443',
+    tls_version         => 'TLS-Version:  {1}',
+    http_version        => 'HTTP-Version: {1}',
+    tls_cipher          => 'Cipher-Suite: {1}',
+    tls_cert            => 'Zertifikat:   {1}',
+    tls_issuer          => 'Aussteller:   {1}',
+    tls_sans            => 'SANs:         {1}',
+    tls_valid_until     => 'Gültig bis:   {1}',
+    tls_days_ok         => '[OK] Noch {1} Tage gültig',
+    tls_days_warn       => '[!] Zertifikat läuft in {1} Tagen ab',
+    tls_days_high       => '[HIGH] Zertifikat läuft in {1} Tagen ab!',
+    tls_expired         => '[KRITISCH] Zertifikat seit {1} Tagen ABGELAUFEN!',
+    tls_self_signed     => '[!] Selbst signiertes Zertifikat!',
+    tls_ok_13           => '[OK] TLS 1.3',
+    tls_ok_12           => '[OK] TLS 1.2',
+    tls_deprecated      => '[!] Veraltete TLS-Version ({1}) — TLS 1.2+ erforderlich!',
+    tls_weak_cipher     => '[!] Schwache Cipher-Suite ({1})',
+    no_ssl_module       => 'IO::Socket::SSL nicht installiert — installieren mit: cpan IO::Socket::SSL',
+    # Web
+    web_header          => 'Webserver-Prüfung auf Port {1}',
+    no_web              => 'Kein Webserver auf Port {1}',
+    web_found           => 'Webserver gefunden',
+    web_server          => 'Server: {1}',
+    web_http_only       => '[!] Server leitet zu HTTP weiter — kein HTTPS!',
+    web_http_hint       => '    Sicherheits-Checks laufen auf HTTP (unverschlüsselt)',
+    http_opts_header    => 'HTTP-Optionen',
+    http_dangerous      => 'WARNUNG: Gefährliche HTTP-Methoden aktiv: {1}',
+    # Security headers
+    sec_header          => 'HTTP-Sicherheits-Header',
+    sec_via             => '(via {1})',
+    sec_hsts_ok         => '[OK] Strict-Transport-Security: {1}',
+    sec_hsts_miss       => '[!]  HSTS fehlt — HTTPS nicht erzwungen',
+    sec_csp_ok          => '[OK] Content-Security-Policy: {1}',
+    sec_csp_miss        => '[!]  CSP fehlt — XSS-Risiko',
+    sec_frame_ok        => '[OK] X-Frame-Options: {1}',
+    sec_frame_miss      => '[!]  Clickjacking-Schutz fehlt',
+    sec_mime_ok         => '[OK] X-Content-Type-Options: {1}',
+    sec_mime_miss       => '[!]  MIME-Sniffing-Schutz fehlt',
+    sec_ref_ok          => '[OK] Referrer-Policy: {1}',
+    sec_ref_miss        => '[!]  Referrer-Policy fehlt',
+    sec_perm_ok         => '[OK] Permissions-Policy: {1}',
+    sec_perm_miss       => '[!]  Permissions-Policy fehlt',
+    # Cookies
+    cookie_header       => 'Cookie-Sicherheits-Flags',
+    no_cookies          => 'Keine Set-Cookie-Header gefunden',
+    cookie_ok           => '[OK] {1}: Secure + HttpOnly + SameSite gesetzt',
+    cookie_issues       => '[!] {1}: {2}',
+    cookie_secure_miss  => 'Secure fehlt',
+    cookie_httponly_miss=> 'HttpOnly fehlt',
+    cookie_samesite_none=> 'SameSite=None (CSRF-Risiko)',
+    cookie_samesite_miss=> 'SameSite fehlt',
+    # CORS
+    cors_header         => 'CORS-Richtlinie',
+    cors_wildcard       => '[!] {1}: ACAO=* — alle Ursprünge erlaubt (für öffentliche APIs akzeptabel)',
+    cors_crit_wildcard  => '[KRITISCH] {1}: ACAO=* mit Credentials=true — Fehlkonfiguration!',
+    cors_reflects       => '[HIGH] {1}: spiegelt beliebigen Ursprung — {2}',
+    cors_crit_reflects  => '[KRITISCH] {1}: spiegelt Ursprung + Credentials=true — Session-Hijacking möglich!',
+    cors_ok             => '[OK] {1}: ACAO={2}',
+    # Redirect chain
+    redirect_header     => 'Weiterleitungskette',
+    redirect_step       => '  {1}. [{2}]  {3}',
+    redirect_https_ok   => '[OK] Ziel verwendet HTTPS',
+    redirect_http_warn  => '[!]  Ziel ist unverschlüsseltes HTTP!',
+    # CMS
+    cms_header          => 'CMS / Framework-Erkennung',
+    cms_detected        => 'Erkannt: {1}',
+    cms_none            => 'Kein CMS/Framework erkannt',
+    # Tech stack
+    stack_header        => 'Technologie-Stack',
+    stack_none          => 'Keine weiteren Stack-Informationen',
+    # Error page
+    errpage_header      => 'Fehlerseiten-Fingerprint',
+    errpage_status      => 'HTTP {1} auf unbekanntem Pfad',
+    errpage_hints       => 'Framework-Hinweise: {1}',
+    errpage_none        => 'Kein Framework aus Fehlerseite erkennbar',
+    # Mixed content
+    mixed_header        => 'Mixed-Content-Prüfung',
+    mixed_no_https      => 'HTTPS nicht verfügbar, wird übersprungen',
+    mixed_found         => '[!] {1} Mixed-Content-Referenz(en) gefunden:',
+    mixed_ok            => '[OK] Kein Mixed Content gefunden',
+    # OS detection
+    os_header           => 'Betriebssystem-Erkennung',
+    os_none             => 'Keine OS-Hinweise gefunden',
+    nmap_not_found      => 'Nmap nicht installiert — TCP/IP-Stack-Fingerprint übersprungen',
+    nmap_install        => '  Installieren: sudo apt install nmap   (Debian/Ubuntu/Raspberry Pi OS)',
+    nmap_root_hint      => '  Für vollständige OS-Erkennung als root ausführen: sudo perl hackbot2 -n <host>',
+    nmap_root_mode      => 'Starte nmap OS-Scan (root-Modus)...',
+    nmap_sv_mode        => 'Starte nmap -sV (root erforderlich für -O OS-Erkennung)...',
+    ping_ttl            => '{1}  [ping TTL={2}, orig={3}, ~{4} Hops]',
+    # Email security
+    email_header        => 'E-Mail-Sicherheit: {1}',
+    spf_ok              => '       [OK] -all: Unautorisierte Absender werden abgelehnt',
+    spf_soft            => '       [~]  ~all: Soft Fail, wird als Spam markiert',
+    spf_weak            => '       [!]  +all/?all: Spoofing möglich!',
+    spf_missing         => 'SPF:   [!] Kein SPF-Eintrag — Domain kann gefälscht werden!',
+    dmarc_reject        => '       [OK] p=reject: Gefälschte Mails werden abgelehnt',
+    dmarc_quarantine    => '       [~]  p=quarantine: Gefälschte Mails → Spam',
+    dmarc_none          => '       [!]  p=none: Nur Monitoring, keine Durchsetzung!',
+    dmarc_missing       => 'DMARC: [!] Kein DMARC-Eintrag gefunden!',
+    dkim_testing        => 'DKIM:  Teste {1} häufige Selektoren...',
+    dkim_found          => "DKIM:  [OK] Selektor '{1}': {2}",
+    dkim_missing        => 'DKIM:  [!] Kein DKIM-Eintrag für gängige Selektoren gefunden',
+    mta_sts_ok          => 'MTA-STS: [OK] konfiguriert',
+    mta_sts_miss        => 'MTA-STS: [i] nicht konfiguriert (optional, aber empfohlen)',
+    # Subdomain scan
+    subdomain_header    => 'Subdomain-Scan: {1}',
+    wildcard_dns        => 'Wildcard-DNS erkannt: *.{1} -> {2} (Falschmeldungen werden gefiltert)',
+    ct_querying         => 'Abfrage der Certificate-Transparency-Logs (crt.sh)...',
+    ct_found            => 'crt.sh: {1} eindeutige Subdomains gefunden',
+    ct_ssl_needed       => 'crt.sh nicht erreichbar (IO::Socket::SSL erforderlich)',
+    axfr_trying         => 'Versuche DNS-Zonentransfer (AXFR)...',
+    axfr_ok             => 'AXFR erfolgreich',
+    axfr_refused        => 'AXFR verweigert (normal)',
+    bruteforce_scan     => 'DNS-Brute-Force ({1} Namen)...',
+    bruteforce_found    => 'Brute-Force: {1} neue Subdomains gefunden',
+    subdomain_total     => 'Gesamt: {1} bestätigte Subdomains',
+    no_subdomains       => 'Keine Subdomains gefunden',
+    no_subdomain_wc     => 'Keine Subdomains gefunden (alle Antworten waren Wildcard: {1})',
+    subdomain_header_tbl=> 'Subdomain',
+    subdomain_col_src   => 'Quelle',
+    subdomain_col_ip    => 'IP',
+    # Geolocation
+    geo_header          => 'Geolocation für {1}',
+    geo_private         => 'Private/reservierte Adresse, Geolocation übersprungen',
+    geo_no_reach        => 'ip-api.com nicht erreichbar',
+    # Port scan
+    port_header         => 'Port-Scan',
+    no_open_ports       => 'Keine gängigen Ports offen',
+    # Service banners
+    svc_header          => 'Dienst-Banner-Scan',
+    svc_complete        => 'Dienst-Banner-Scan abgeschlossen',
+    svc_no_auth         => ' — keine Authentifizierung erforderlich!',
+    # Disclosure scan
+    disc_header         => 'Disclosure- / Datei-Scan',
+    disc_no_db          => 'Disclosure-Datenbank nicht gefunden ({1})',
+    disc_scanning       => 'scanne {1}/{2}: {3}',
+    disc_no_findings    => 'Keine sensiblen Dateien gefunden',
+    disc_summary        => 'Zusammenfassung: {1}',
+    disc_url            => 'URL:  {1}',
+    disc_category       => 'Kategorie: {1} | {2}',
+    disc_preview        => 'Vorschau:  {1}',
+    # Whois
+    whois_header        => 'Whois-Abfrage',
+    whois_ripe          => 'Whois @RIPE',
+    whois_arin          => 'Whois @ARIN',
+    whois_apnic         => 'Whois @APNIC',
+    whois_unknown       => 'Unbekannte Registry, Whois übersprungen',
+    whois_reserved      => 'Von IANA reserviert',
+    # DNSBL
+    dnsbl_header        => 'DNSBL-Spam-Prüfung',
+    dnsbl_private       => 'Private Adresse, DNSBL-Prüfung übersprungen',
+    dnsbl_listed        => 'GELISTET bei {1}',
+    dnsbl_clean         => 'Sauber bei {1}',
+    # Identd
+    ident_header        => 'Identd',
+    ident_none          => 'Kein Identd auf {1}, vollständiger Scan übersprungen',
+    ident_col           => "Port\tStatus\tDienst\tEigentümer",
+    # Telnet
+    telnet_header       => 'Telnet-Fingerprint',
+    no_telnet           => 'Kein Telnet',
+    telnet_fp           => 'Fingerprint: {1}',
+    telnet_os           => 'OS-Schätzung: {1} (eingereicht von {2})',
+    telnet_not_found    => 'Fingerprint nicht in Datenbank',
+    telnet_no_db        => 'Fingerprint-Datenbank nicht gefunden ({1}), übersprungen',
+    # X11
+    x11_header          => 'X11-Zugriffsprüfung (Port 6000)',
+    no_x11              => 'Kein X11',
+    x11_allowed         => 'X11-Zugriff ERLAUBT — keine Authentifizierung erforderlich!',
+    x11_denied          => 'X11-Zugriff nicht erlaubt',
+    # CGI scan
+    cgi_header          => 'CGI-Schwachstellen-Scan (Port {1})',
+    cgi_no_db           => 'CGI-Datenbank nicht gefunden (erwartet: {1})',
+    cgi_found           => 'GEFUNDEN: {1}',
+    # Proxy
+    proxy_test          => 'Proxy antwortet, teste...',
+    proxy_ok            => 'Proxy-Nutzung erlaubt',
+    proxy_fail          => 'Proxy-Nutzung nicht erlaubt, fahre ohne fort',
+    proxy_noconnect     => 'Proxy-Verbindung fehlgeschlagen, fahre ohne fort',
+    # JSON output
+    json_written        => 'JSON-Ergebnisse gespeichert in {1}',
+    # Config
+    lang_unknown        => 'Unbekannte Sprache "{1}", verwende Englisch',
+  },
+);
+
+# Current language (default English; may be overridden by load_config)
+my $_lang = 'en';
+
+# Translation function — t('key') or t('key', arg1, arg2, ...)
+sub t {
+    my ($key, @args) = @_;
+    my $str = $LANG{$_lang}{$key} // $LANG{en}{$key} // "[$key]";
+    $str =~ s/\{(\d+)\}/$args[$1-1] \/\/ ''/ge;
+    return $str;
+}
+
+# Load config file (~/.hackbot2rc or $Bin/hackbot2.conf)
+sub load_config {
+    my @paths = (
+        "$ENV{HOME}/.hackbot2rc",
+        "$Bin/hackbot2.conf",
+    );
+    for my $path (@paths) {
+        next unless -f $path;
+        open(my $fh, '<', $path) or next;
+        while (<$fh>) {
+            chomp; s/#.*//; s/^\s+//; s/\s+$//;
+            next unless /\S/;
+            my ($k, $v) = split(/\s*=\s*/, $_, 2);
+            next unless defined $k && defined $v;
+            if ($k eq 'lang') {
+                if (exists $LANG{$v}) {
+                    $_lang = $v;
+                } else {
+                    warn t('lang_unknown', $v) . "\n";
+                }
+            }
+        }
+        close $fh;
+        last;
+    }
+}
+BEGIN_CONFIG: load_config();
+
+# --------------------------------------------------------------------------
 # Default options
 # --------------------------------------------------------------------------
 my %opt = (
@@ -201,19 +718,19 @@ if ($opt{F}) {
     close $fh;
 
     for $host (@targetlist) {
-        log_print("Checking $host ...\n\n", 'h');
+        log_print(t('checking_ip', $host) . "\n\n", 'h');
         scanit();
     }
 } else {
     if ($host =~ /[a-zA-Z]/) {
-        log_print("Checking named host $host ...", 'c');
+        log_print(t('checking_host', $host), 'c');
         scanit();
     } else {
         get_range();
         $range = 1;
-        log_print("Range scan from $start to $end\n", 'c') unless $start eq $end;
+        log_print(t('range_scan', $start, $end) . "\n", 'c') unless $start eq $end;
         for $host (@targetlist) {
-            log_print("\nChecking $host ...\n\n", 'c');
+            log_print("\n" . t('checking_ip', $host) . "\n\n", 'c');
             scanit();
         }
     }
@@ -228,14 +745,14 @@ exit 0;
 # --------------------------------------------------------------------------
 sub scanit {
     if (!check_ip($host)) {
-        log_print(" resolving $host ...\n\n", 'c');
+        log_print(t('resolving', $host) . "\n\n", 'c');
         my $handler = gethost($host);
         if (!$handler) {
-            log_print("$host does not resolve, skipping.\n\n", 'c');
+            log_print(t('no_resolve', $host) . "\n\n", 'c');
             return;
         }
         $target = inet_ntoa($handler->addr_list->[0]);
-        log_print("Resolved to: $target\n\n", 'i');
+        log_print(t('resolved_to', $target) . "\n\n", 'i');
         $host_resolves = 1;
     } else {
         $target = $host;
@@ -309,8 +826,8 @@ sub banner {
     my $sep = '#' x 65;
     log_print("$sep\n", 'c');
     log_print("#  HackBot v$VERSION - Network Security Scanner       " . ' ' x (65 - 47 - length($VERSION)) . "#\n", 'c');
-    log_print("#  Based on HackBot (c) 2000-2002 Marco van Berkum            #\n", 'c');
-    log_print("#  Modified and extended by Alexander Thiele, 2026            #\n", 'c');
+    log_print("#  " . t('banner_based') . "            #\n", 'c');
+    log_print("#  " . t('banner_modified') . "            #\n", 'c');
     log_print("#                                                             #\n", 'c');
     log_print("#  Alexander Thiele - alexander\@thiele.es                    #\n", 'c');
     log_print("#  Marco van Berkum                                           #\n", 'c');
@@ -333,7 +850,7 @@ sub subdomain_scan {
         return;
     }
 
-    log_print("Subdomain scan: $domain\n", 'h');
+    log_print(t('subdomain_header', $domain) . "\n", 'h');
     log_print("-" x (17 + length $domain) . "\n", 'h');
 
     my %found;   # subdomain => source
@@ -347,12 +864,12 @@ sub subdomain_scan {
         my $h = gethost("$rand.$domain");
         if ($h) {
             $wildcard_ip = inet_ntoa($h->addr_list->[0]);
-            log_print("Wildcard DNS detected: *.$domain -> $wildcard_ip (false positives will be filtered)\n", 'c');
+            log_print(t('wildcard_dns', $domain, $wildcard_ip) . "\n", 'c');
         }
     }
 
     # --- Source 1: Certificate Transparency via crt.sh ---
-    log_print("Querying Certificate Transparency logs (crt.sh)...\n", 'h');
+    log_print(t('ct_querying') . "\n", 'h');
     if ($ssl_available) {
         my $sock = IO::Socket::SSL->new(
             PeerAddr        => 'crt.sh', PeerPort => 443,
@@ -382,16 +899,16 @@ sub subdomain_scan {
                 }
             }
             my $ct_count = scalar grep { $found{$_} eq 'crt.sh' } keys %found;
-            log_print("crt.sh: $ct_count unique subdomains found\n", 'c');
+            log_print(t('ct_found', $ct_count) . "\n", 'c');
         } else {
-            log_print("crt.sh unreachable (IO::Socket::SSL required)\n", 'i');
+            log_print(t('ct_ssl_needed') . "\n", 'i');
         }
     } else {
-        log_print("IO::Socket::SSL not installed, skipping crt.sh lookup\n", 'i');
+        log_print(t('ct_ssl_needed') . "\n", 'i');
     }
 
     # --- Source 2: DNS Zone Transfer (AXFR) ---
-    log_print("Attempting DNS zone transfer (AXFR)...\n", 'h');
+    log_print(t('axfr_trying') . "\n", 'h');
     {
         open(my $ns_fh, '-|', 'dig', '+short', 'NS', $domain) or goto SKIP_AXFR;
         my @nameservers = map { chomp; s/\.$//; $_ } <$ns_fh>;
@@ -412,13 +929,13 @@ sub subdomain_scan {
                 $axfr_ok = 1;
             }
         }
-        log_print($axfr_ok ? "AXFR succeeded\n" : "AXFR refused (normal)\n", 'i');
+        log_print($axfr_ok ? t('axfr_ok') . "\n" : t('axfr_refused') . "\n", 'i');
     }
     SKIP_AXFR:
 
     # --- Source 3: DNS Brute-Force ---
     my $bf_total = scalar @SUBDOMAIN_WORDLIST;
-    log_print("DNS brute-force ($bf_total names)...\n", 'h');
+    log_print(t('bruteforce_scan', $bf_total) . "\n", 'h');
     my $bf_found = 0;
     my $bf_idx   = 0;
     for my $word (@SUBDOMAIN_WORDLIST) {
@@ -434,7 +951,7 @@ sub subdomain_scan {
         }
     }
     print STDERR "\r" . ' ' x 70 . "\r" unless $opt{j};
-    log_print("Brute-force: $bf_found new subdomains found\n", 'c');
+    log_print(t('bruteforce_found', $bf_found) . "\n", 'c');
 
     # --- Resolve all found subdomains and filter wildcard responses ---
     my %resolved;   # subdomain => ip
@@ -450,7 +967,7 @@ sub subdomain_scan {
     # --- Report ---
     log_print("\n", 'c');
     if (%resolved) {
-        log_print(sprintf("%-45s %-12s %s\n", 'Subdomain', 'Source', 'IP'), 'c');
+        log_print(sprintf("%-45s %-12s %s\n", t('subdomain_header_tbl'), t('subdomain_col_src'), t('subdomain_col_ip')), 'c');
         log_print("-" x 75 . "\n", 'c');
 
         for my $sub (sort keys %resolved) {
@@ -459,13 +976,13 @@ sub subdomain_scan {
         }
 
         my $total = scalar keys %resolved;
-        log_print("\nTotal: $total confirmed subdomains\n\n", 'c');
+        log_print("\n" . t('subdomain_total', $total) . "\n\n", 'c');
         $json_results{subdomains} = [ sort keys %resolved ];
     } else {
         if ($wildcard_ip) {
-            log_print("No subdomains found (all responses were wildcard: $wildcard_ip)\n\n", 'i');
+            log_print(t('no_subdomain_wc', $wildcard_ip) . "\n\n", 'i');
         } else {
-            log_print("No subdomains found\n\n", 'i');
+            log_print(t('no_subdomains') . "\n\n", 'i');
         }
     }
 }
@@ -486,16 +1003,16 @@ sub _base_domain {
 }
 
 sub endbanner {
-    log_print("--->\n", 'c');
-    log_print("All scans done. HackBot $VERSION\n", 'c');
-    log_print("---> Exiting.\n", 'c');
+    log_print(t('separator') . "\n", 'c');
+    log_print(t('scan_done', $VERSION) . "\n", 'c');
+    log_print(t('exiting') . "\n", 'c');
 }
 
 # --------------------------------------------------------------------------
 # SSH scan
 # --------------------------------------------------------------------------
 sub ssh_scan {
-    log_print("Checking for SSH\n", 'h');
+    log_print(t('ssh_header') . "\n", 'h');
     log_print("----------------\n", 'h');
 
     my $sock = IO::Socket::INET->new(
@@ -504,7 +1021,7 @@ sub ssh_scan {
     );
 
     if (!$sock) {
-        log_print("No SSH\n\n", 'i');
+        log_print(t('no_ssh') . "\n\n", 'i');
         return;
     }
 
@@ -515,9 +1032,9 @@ sub ssh_scan {
         alarm(0);
         if ($buff) {
             chomp $buff;
-            log_print("SSH banner: $buff\n\n", 'c');
+            log_print(t('ssh_banner', $buff) . "\n\n", 'c');
             if ($buff =~ /SSH-1\./) {
-                log_print("WARNING: SSHv1 detected - insecure, upgrade required!\n\n", 'c');
+                log_print(t('warn_sshv1') . "\n\n", 'c');
             }
             $json_results{ssh} = $buff;
         }
@@ -529,7 +1046,7 @@ sub ssh_scan {
 # FTP scan
 # --------------------------------------------------------------------------
 sub ftp_scan {
-    log_print("Checking for FTP\n", 'h');
+    log_print(t('ftp_header') . "\n", 'h');
     log_print("----------------\n", 'h');
 
     my $sock = IO::Socket::INET->new(
@@ -538,7 +1055,7 @@ sub ftp_scan {
     );
 
     if (!$sock) {
-        log_print("No FTP\n\n", 'i');
+        log_print(t('no_ftp') . "\n\n", 'i');
         return;
     }
 
@@ -547,7 +1064,7 @@ sub ftp_scan {
         alarm($opt{T} * 4);
 
         sysread($sock, my $banner, 1024);
-        log_print("FTP banner: $banner\n", 'c') if $banner;
+        log_print(t('ftp_banner', $banner) . "\n", 'c') if $banner;
 
         print $sock "USER anonymous\r\n";
         sleep(1);
@@ -558,23 +1075,23 @@ sub ftp_scan {
         sysread($sock, my $resp2, 256);
 
         if ($resp2 && $resp2 =~ /^230/) {
-            log_print("Anonymous login ALLOWED\n", 'c');
+            log_print(t('ftp_anon_allowed') . "\n", 'c');
             print $sock "CWD upload\r\n";
             sleep(1);
             sysread($sock, my $resp3, 256);
             if ($resp3 && $resp3 =~ /^250/) {
-                log_print("Upload directory found\n", 'c');
+                log_print(t('ftp_upload_found') . "\n", 'c');
                 print $sock "STOR hackbot_test.tmp\r\n";
                 sleep(1);
                 sysread($sock, my $resp4, 256);
                 if ($resp4 && $resp4 !~ /^553/) {
-                    log_print("Write access to upload directory!\n\n", 'c');
+                    log_print(t('ftp_write_yes') . "\n\n", 'c');
                 } else {
-                    log_print("No write access to upload directory\n\n", 'c');
+                    log_print(t('ftp_write_no') . "\n\n", 'c');
                 }
             }
         } else {
-            log_print("Anonymous login not allowed\n\n", 'i');
+            log_print(t('ftp_anon_denied') . "\n\n", 'i');
         }
         alarm(0);
     };
@@ -585,7 +1102,7 @@ sub ftp_scan {
 # SMTP/MTA scan
 # --------------------------------------------------------------------------
 sub mta_scan {
-    log_print("MTA - Relay / VRFY / EXPN check\n", 'h');
+    log_print(t('mta_header') . "\n", 'h');
     log_print("--------------------------------\n", 'h');
 
     my $sock = IO::Socket::INET->new(
@@ -594,7 +1111,7 @@ sub mta_scan {
     );
 
     if (!$sock) {
-        log_print("No MTA\n\n", 'i');
+        log_print(t('no_mta') . "\n\n", 'i');
         return;
     }
 
@@ -619,27 +1136,27 @@ sub mta_scan {
         sysread($sock, my $r2, 256);
 
         if ($r2 && $r2 =~ /^250/) {
-            log_print("Open relay detected!\n\n", 'c');
+            log_print(t('mta_relay_open') . "\n\n", 'c');
         } else {
-            log_print("Relaying not allowed\n\n", 'i');
+            log_print(t('mta_relay_closed') . "\n\n", 'i');
         }
 
         print $sock "VRFY root\r\n";
         sleep(1);
         sysread($sock, my $vrfy, 256);
         if ($vrfy && $vrfy =~ /^250/) {
-            log_print("VRFY enabled: $vrfy\n", 'c');
+            log_print(t('mta_vrfy_on', $vrfy) . "\n", 'c');
         } else {
-            log_print("VRFY disabled\n\n", 'i');
+            log_print(t('mta_vrfy_off') . "\n\n", 'i');
         }
 
         print $sock "EXPN root\r\n";
         sleep(1);
         sysread($sock, my $expn, 256);
         if ($expn && $expn =~ /^250/) {
-            log_print("EXPN enabled: $expn\n\n", 'c');
+            log_print(t('mta_expn_on', $expn) . "\n\n", 'c');
         } else {
-            log_print("EXPN disabled\n\n", 'i');
+            log_print(t('mta_expn_off') . "\n\n", 'i');
         }
 
         print $sock "QUIT\r\n";
@@ -652,7 +1169,7 @@ sub mta_scan {
 # DNS scan
 # --------------------------------------------------------------------------
 sub dns_scan {
-    log_print("DNS scan\n", 'h');
+    log_print(t('dns_header') . "\n", 'h');
     log_print("--------\n", 'h');
 
     # BIND version (only when scanning a nameserver directly)
@@ -667,13 +1184,13 @@ sub dns_scan {
         my $out = do { local $/; <$dig> };
         close $dig;
         if ($out && $out =~ /"([^"]+)"/) {
-            log_print("BIND version: $1\n", 'c');
+            log_print(t('dns_bind_ver', $1) . "\n", 'c');
             $json_results{dns_version} = $1;
         } else {
-            log_print("DNS port open but no version returned\n", 'i');
+            log_print(t('dns_no_ver') . "\n", 'i');
         }
     } else {
-        log_print("No DNS server on port 53\n", 'i');
+        log_print(t('no_dns') . "\n", 'i');
     }
     SKIP_BIND:
 
@@ -681,7 +1198,7 @@ sub dns_scan {
     return if check_ip($host);
     my $domain = $host;
 
-    log_print("\nDNS records for $domain\n", 'h');
+    log_print("\n" . t('dns_records_for', $domain) . "\n", 'h');
     log_print("-" x (17 + length $domain) . "\n", 'h');
 
     my %records;
@@ -699,26 +1216,26 @@ sub dns_scan {
 
     # IPv6 reachability
     if ($records{AAAA}) {
-        log_print("\n[OK] IPv6 (AAAA) supported\n", 'c');
+        log_print("\n" . t('dns_ipv6_ok') . "\n", 'c');
         my $v6 = $records{AAAA}[0];
         my $sock6 = IO::Socket::INET->new(
             PeerAddr => $v6, PeerPort => 80,
             Proto => 'tcp', Timeout => $opt{T});
         if ($sock6) {
-            log_print("[OK] IPv6 address $v6 reachable on port 80\n", 'c');
+            log_print(t('dns_ipv6_reach', $v6) . "\n", 'c');
             close $sock6;
         } else {
-            log_print("[i]  IPv6 address $v6 not reachable on port 80\n", 'i');
+            log_print(t('dns_ipv6_noreach', $v6) . "\n", 'i');
         }
     } else {
-        log_print("\n[!]  No AAAA record — IPv6 not supported\n", 'i');
+        log_print("\n" . t('dns_ipv6_missing') . "\n", 'i');
     }
 
     # CAA advisory
     if ($records{CAA}) {
-        log_print("\n[OK] CAA records present — certificate issuance restricted\n", 'c');
+        log_print("\n" . t('dns_caa_ok') . "\n", 'c');
     } else {
-        log_print("\n[!]  No CAA record — any CA can issue certificates for this domain\n", 'i');
+        log_print("\n" . t('dns_caa_missing') . "\n", 'i');
     }
 
     # DANE / TLSA
@@ -727,9 +1244,9 @@ sub dns_scan {
     close $tlsa_fh;
     if (@tlsa) {
         chomp @tlsa;
-        log_print("[OK] DANE/TLSA record found: $tlsa[0]\n", 'c');
+        log_print(t('dns_tlsa_ok', $tlsa[0]) . "\n", 'c');
     } else {
-        log_print("[i]  No DANE/TLSA record (optional but good for email MTAs)\n", 'i');
+        log_print(t('dns_tlsa_missing') . "\n", 'i');
     }
     SKIP_TLSA:
 
@@ -742,7 +1259,7 @@ sub dns_scan {
 # --------------------------------------------------------------------------
 sub checkweb {
     undef $noweb;
-    log_print("Checking webserver on port $port\n", 'h');
+    log_print(t('web_header', $port) . "\n", 'h');
     log_print("---------------------------------\n", 'h');
 
     my $sock = IO::Socket::INET->new(
@@ -752,7 +1269,7 @@ sub checkweb {
 
     if (!$sock) {
         $noweb = 1;
-        log_print("No webserver on port $port\n\n", 'i');
+        log_print(t('no_web', $port) . "\n\n", 'i');
         return;
     }
 
@@ -764,14 +1281,14 @@ sub checkweb {
 
     if ($resp) {
         log_print("$resp\n", 'c') if $opt{w} =~ /[va]/;
-        log_print("Webserver found\n\n", 'c') unless $opt{w} =~ /[va]/;
+        log_print(t('web_found') . "\n\n", 'c') unless $opt{w} =~ /[va]/;
         check_server_version($resp);
         $json_results{http_banner} = (split(/\r?\n/, $resp))[0];
 
         # Detect HTTP→HTTP redirect (no HTTPS) and warn
         if ($resp =~ /^Location:\s*http:\/\//im && $resp =~ /^HTTP\/\S+\s+30[12]/m) {
-            log_print("[!] Server redirects to plain HTTP — no HTTPS in use!\n", 'c');
-            log_print("    Security header checks will run on HTTP (no encryption)\n\n", 'c');
+            log_print(t('web_http_only') . "\n", 'c');
+            log_print(t('web_http_hint') . "\n\n", 'c');
         }
     }
 }
@@ -782,7 +1299,7 @@ sub check_server_version {
     if ($resp =~ /Server:\s*(.+)/i) {
         my $srv = $1;
         chomp $srv;
-        log_print("Server: $srv\n", 'c');
+        log_print(t('web_server', $srv) . "\n", 'c');
         $json_results{server} = $srv;
 
         # Apache version advisory
@@ -812,7 +1329,7 @@ sub check_server_version {
 # HTTP OPTIONS
 # --------------------------------------------------------------------------
 sub http_options {
-    log_print("HTTP OPTIONS\n", 'h');
+    log_print(t('http_opts_header') . "\n", 'h');
     log_print("------------\n", 'h');
 
     my $sock = IO::Socket::INET->new(
@@ -832,7 +1349,7 @@ sub http_options {
 
         # Flag dangerous HTTP methods
         if ($buff =~ /\b(TRACE|PUT|DELETE|CONNECT)\b/i) {
-            log_print("WARNING: Potentially dangerous HTTP methods enabled: $1\n", 'c');
+            log_print(t('http_dangerous', $1) . "\n", 'c');
         }
     }
     log_print("\n", 'c');
@@ -843,7 +1360,7 @@ sub http_options {
 # --------------------------------------------------------------------------
 sub cgi_scan {
     unless (-e $db_path) {
-        log_print("CGI database not found (expected: $db_path)\n\n", 'c');
+        log_print(t('cgi_no_db', $db_path) . "\n\n", 'c');
         return;
     }
 
@@ -852,7 +1369,7 @@ sub cgi_scan {
         return;
     };
 
-    log_print("CGI vulnerability scan (port $port)\n", 'h');
+    log_print(t('cgi_header', $port) . "\n", 'h');
     log_print("------------------------------------\n", 'h');
 
     my $host_hdr = $host_resolves ? $host : $target;
@@ -883,7 +1400,7 @@ sub cgi_scan {
         close $sock;
 
         if ($buff && $buff =~ /^HTTP\/\d\.\d 200/) {
-            log_print("FOUND: $path\n", 'c');
+            log_print(t('cgi_found', $path) . "\n", 'c');
             log_print("  $desc\n", 'c') if $desc;
             log_print("  $advisory\n", 'c') if $advisory;
             log_print("\n", 'c');
@@ -905,7 +1422,7 @@ my %severity_color = (
 
 sub disclosure_scan {
     unless (-e $disc_db) {
-        log_print("Disclosure database not found ($disc_db)\n\n", 'c');
+        log_print(t('disc_no_db', $disc_db) . "\n\n", 'c');
         return;
     }
 
@@ -920,7 +1437,7 @@ sub disclosure_scan {
     my $total   = scalar @entries;
     my $current = 0;
 
-    log_print("Disclosure / common file scan\n", 'h');
+    log_print(t('disc_header') . "\n", 'h');
     log_print("-----------------------------\n", 'h');
 
     my $host_hdr  = $host_resolves ? $host : $target;
@@ -935,7 +1452,7 @@ sub disclosure_scan {
 
         $current++;
         # Progress on STDERR (not written to output file)
-        printf STDERR "\r  scanning %d/%d: %-45s", $current, $total, $path
+        printf STDERR "\r  %-70s", t('disc_scanning', $current, $total, $path)
             unless $opt{j};
 
         sleep($opt{z}) if $opt{z};
@@ -963,13 +1480,13 @@ sub disclosure_scan {
             $found{$severity}++;
         } else {
             log_print("$sev_tag $path\n", 'c');
-            log_print("  Category: $category | $desc\n", 'c');
+            log_print("  " . t('disc_category', $category, $desc) . "\n", 'c');
 
             # For robots/feed/llms and similar: just show the URL, no content dump
             if ($category eq 'disclosure') {
                 my $proto = $ssl_available ? 'https' : 'http';
                 my $url_host = $host_resolves ? $host : $target;
-                log_print("  URL:  $proto://$url_host$path\n", 'c');
+                log_print("  " . t('disc_url', "$proto://$url_host$path") . "\n", 'c');
             }
 
             # For sensitive files: show first line only (enough to confirm it's real)
@@ -977,7 +1494,7 @@ sub disclosure_scan {
                 my ($first_line) = split(/\r?\n/, $resp_body);
                 $first_line //= '';
                 $first_line = substr($first_line, 0, 120);
-                log_print("  Preview:  $first_line\n", 'c') if $first_line =~ /\S/;
+                log_print("  " . t('disc_preview', $first_line) . "\n", 'c') if $first_line =~ /\S/;
             }
 
             $found{$severity}++;
@@ -995,9 +1512,9 @@ sub disclosure_scan {
     print STDERR "\r" . ' ' x 70 . "\r" unless $opt{j};
 
     if (%found) {
-        log_print("Summary: " . join(', ', map { "$found{$_} $_" } sort keys %found) . "\n\n", 'c');
+        log_print(t('disc_summary', join(', ', map { "$found{$_} $_" } sort keys %found)) . "\n\n", 'c');
     } else {
-        log_print("No sensitive files found\n\n", 'i');
+        log_print(t('disc_no_findings') . "\n\n", 'i');
     }
 }
 
@@ -1095,7 +1612,7 @@ sub _decode_chunked {
 # HTTP Redirect Chain (new in v3)
 # --------------------------------------------------------------------------
 sub redirect_chain {
-    log_print("Redirect Chain\n", 'h');
+    log_print(t('redirect_header') . "\n", 'h');
     log_print("--------------\n", 'h');
 
     my $cur_host   = $target;
@@ -1148,14 +1665,14 @@ sub redirect_chain {
     }
 
     for my $step (@chain) {
-        log_print("  $step->{hop}. [$step->{code}]  $step->{url}\n", 'c');
+        log_print(t('redirect_step', $step->{hop}, $step->{code}, $step->{url}) . "\n", 'c');
     }
     if (@chain) {
         my $final = $chain[-1]{url};
         if ($final =~ m{^https://}) {
-            log_print("[OK] Final destination uses HTTPS\n\n", 'c');
+            log_print(t('redirect_https_ok') . "\n\n", 'c');
         } else {
-            log_print("[!]  Final destination is plain HTTP!\n\n", 'c');
+            log_print(t('redirect_http_warn') . "\n\n", 'c');
         }
     }
 }
@@ -1164,7 +1681,7 @@ sub redirect_chain {
 # CMS Detection (new in v3)
 # --------------------------------------------------------------------------
 sub cms_detect {
-    log_print("CMS / Framework Detection\n", 'h');
+    log_print(t('cms_header') . "\n", 'h');
     log_print("-------------------------\n", 'h');
 
     my $host_hdr = $host_resolves ? $host : $target;
@@ -1225,10 +1742,10 @@ sub cms_detect {
     }
 
     if (@found) {
-        log_print("Detected: " . join(', ', @found) . "\n\n", 'c');
+        log_print(t('cms_detected', join(', ', @found)) . "\n\n", 'c');
         $json_results{cms} = \@found;
     } else {
-        log_print("No CMS/framework identified\n\n", 'i');
+        log_print(t('cms_none') . "\n\n", 'i');
     }
 }
 
@@ -1236,7 +1753,7 @@ sub cms_detect {
 # Technology Stack Fingerprint (new in v3)
 # --------------------------------------------------------------------------
 sub tech_stack_print {
-    log_print("Technology Stack\n", 'h');
+    log_print(t('stack_header') . "\n", 'h');
     log_print("----------------\n", 'h');
 
     my $host_hdr = $host_resolves ? $host : $target;
@@ -1281,7 +1798,7 @@ sub tech_stack_print {
         log_print("\n", 'c');
         $json_results{tech_stack} = \@stack;
     } else {
-        log_print("No additional stack info\n\n", 'i');
+        log_print(t('stack_none') . "\n\n", 'i');
     }
 }
 
@@ -1289,7 +1806,7 @@ sub tech_stack_print {
 # Error Page Fingerprinting (new in v3)
 # --------------------------------------------------------------------------
 sub error_page_fingerprint {
-    log_print("Error Page Fingerprint\n", 'h');
+    log_print(t('errpage_header') . "\n", 'h');
     log_print("----------------------\n", 'h');
 
     my $host_hdr = $host_resolves ? $host : $target;
@@ -1317,11 +1834,11 @@ sub error_page_fingerprint {
     push @hints, "FastAPI/Python"    if $body =~ /Not Found.*detail|FastAPI/i;
     push @hints, "Werkzeug/Flask"    if $body =~ /Werkzeug|werkzeug/i;
 
-    log_print("HTTP $code on unknown path\n", 'c');
+    log_print(t('errpage_status', $code) . "\n", 'c');
     if (@hints) {
-        log_print("Framework hints: " . join(', ', @hints) . "\n\n", 'c');
+        log_print(t('errpage_hints', join(', ', @hints)) . "\n\n", 'c');
     } else {
-        log_print("No framework identified from error page\n\n", 'i');
+        log_print(t('errpage_none') . "\n\n", 'i');
     }
 }
 
@@ -1331,7 +1848,7 @@ sub error_page_fingerprint {
 sub mixed_content_check {
     return unless $ssl_available;
 
-    log_print("Mixed Content Check\n", 'h');
+    log_print(t('mixed_header') . "\n", 'h');
     log_print("-------------------\n", 'h');
 
     my $host_hdr = $host_resolves ? $host : $target;
@@ -1342,7 +1859,7 @@ sub mixed_content_check {
     );
 
     if (!$sock) {
-        log_print("HTTPS not available, skipping\n\n", 'i');
+        log_print(t('mixed_no_https') . "\n\n", 'i');
         return;
     }
 
@@ -1361,12 +1878,12 @@ sub mixed_content_check {
     }
 
     if (@mixed) {
-        log_print("[!] " . scalar(@mixed) . " mixed content reference(s) found:\n", 'c');
+        log_print(t('mixed_found', scalar(@mixed)) . "\n", 'c');
         log_print("    $_\n", 'c') for @mixed;
         log_print("\n", 'c');
         $json_results{mixed_content} = \@mixed;
     } else {
-        log_print("[OK] No mixed content detected\n\n", 'c');
+        log_print(t('mixed_ok') . "\n\n", 'c');
     }
 }
 
@@ -1374,7 +1891,7 @@ sub mixed_content_check {
 # HTTP Security Headers (new in v3)
 # --------------------------------------------------------------------------
 sub security_headers {
-    log_print("HTTP Security Headers\n", 'h');
+    log_print(t('sec_header') . "\n", 'h');
     log_print("---------------------\n", 'h');
 
     my $host_hdr = $host_resolves ? $host : $target;
@@ -1415,23 +1932,23 @@ sub security_headers {
     my ($header_block) = split(/\r?\n\r?\n/, $resp, 2);
     $header_block //= $resp;
 
-    log_print("(via $checked_via)\n", 'i');
+    log_print(t('sec_via', $checked_via) . "\n", 'i');
 
     my @hdrs = (
-        ['Strict-Transport-Security', 'HSTS missing - HTTPS not enforced'],
-        ['Content-Security-Policy',   'CSP missing - XSS risk'],
-        ['X-Frame-Options',           'Clickjacking protection missing'],
-        ['X-Content-Type-Options',    'MIME sniffing protection missing'],
-        ['Referrer-Policy',           'Referrer policy not set'],
-        ['Permissions-Policy',        'Permissions policy not set'],
+        ['Strict-Transport-Security', 'sec_hsts_ok',  'sec_hsts_miss'],
+        ['Content-Security-Policy',   'sec_csp_ok',   'sec_csp_miss'],
+        ['X-Frame-Options',           'sec_frame_ok', 'sec_frame_miss'],
+        ['X-Content-Type-Options',    'sec_mime_ok',  'sec_mime_miss'],
+        ['Referrer-Policy',           'sec_ref_ok',   'sec_ref_miss'],
+        ['Permissions-Policy',        'sec_perm_ok',  'sec_perm_miss'],
     );
 
     for my $hdr (@hdrs) {
-        my ($name, $warn) = @$hdr;
+        my ($name, $ok_key, $miss_key) = @$hdr;
         if ($header_block =~ /^\Q$name\E:\s*(.+?)\r?$/im) {
-            log_print("[OK] $name: $1\n", 'c');
+            log_print(t($ok_key, $1) . "\n", 'c');
         } else {
-            log_print("[!]  $warn\n", 'c');
+            log_print(t($miss_key) . "\n", 'c');
         }
     }
     log_print("\n", 'c');
@@ -1441,7 +1958,7 @@ sub security_headers {
 # Cookie Security Flags (new in v3)
 # --------------------------------------------------------------------------
 sub cookie_check {
-    log_print("Cookie Security Flags\n", 'h');
+    log_print(t('cookie_header') . "\n", 'h');
     log_print("---------------------\n", 'h');
 
     my $host_hdr = $host_resolves ? $host : $target;
@@ -1450,7 +1967,7 @@ sub cookie_check {
 
     my @cookies = ($resp =~ /^Set-Cookie:\s*(.+)$/gim);
     unless (@cookies) {
-        log_print("No Set-Cookie headers found\n\n", 'i');
+        log_print(t('no_cookies') . "\n\n", 'i');
         return;
     }
 
@@ -1459,16 +1976,16 @@ sub cookie_check {
         $name //= 'unknown';
         my @issues;
 
-        push @issues, "Secure missing"       unless $cookie =~ /;\s*Secure\b/i;
-        push @issues, "HttpOnly missing"     unless $cookie =~ /;\s*HttpOnly\b/i;
+        push @issues, t('cookie_secure_miss')   unless $cookie =~ /;\s*Secure\b/i;
+        push @issues, t('cookie_httponly_miss')  unless $cookie =~ /;\s*HttpOnly\b/i;
 
-        if    ($cookie =~ /;\s*SameSite=None/i)   { push @issues, "SameSite=None (CSRF risk)" }
-        elsif ($cookie !~ /;\s*SameSite=/i)        { push @issues, "SameSite missing" }
+        if    ($cookie =~ /;\s*SameSite=None/i)   { push @issues, t('cookie_samesite_none') }
+        elsif ($cookie !~ /;\s*SameSite=/i)        { push @issues, t('cookie_samesite_miss') }
 
         if (@issues) {
-            log_print("[!] $name: " . join(' | ', @issues) . "\n", 'c');
+            log_print(t('cookie_issues', $name, join(' | ', @issues)) . "\n", 'c');
         } else {
-            log_print("[OK] $name: Secure + HttpOnly + SameSite set\n", 'c');
+            log_print(t('cookie_ok', $name) . "\n", 'c');
         }
     }
     log_print("\n", 'c');
@@ -1478,7 +1995,7 @@ sub cookie_check {
 # CORS Misconfiguration Check (new in v3)
 # --------------------------------------------------------------------------
 sub cors_check {
-    log_print("CORS Policy\n", 'h');
+    log_print(t('cors_header') . "\n", 'h');
     log_print("-----------\n", 'h');
 
     my $host_hdr   = $host_resolves ? $host : $target;
@@ -1499,17 +2016,17 @@ sub cors_check {
         my $label = $path eq '/' ? 'root' : $path;
 
         if ($acao eq '*' && $creds) {
-            log_print("[CRITICAL] $label: ACAO=* with Credentials=true — browsers block but server is misconfigured!\n", 'c');
+            log_print(t('cors_crit_wildcard', $label, $acao) . "\n", 'c');
         } elsif ($acao eq '*') {
-            log_print("[!] $label: ACAO=* — any origin allowed (acceptable for public APIs)\n", 'c');
+            log_print(t('cors_wildcard', $label, $acao) . "\n", 'c');
         } elsif (index(lc $acao, 'evil.example') >= 0) {
             if ($creds) {
-                log_print("[CRITICAL] $label: reflects arbitrary Origin + Credentials=true — session hijacking possible!\n", 'c');
+                log_print(t('cors_crit_reflects', $label, $acao) . "\n", 'c');
             } else {
-                log_print("[HIGH] $label: reflects arbitrary Origin — $acao\n", 'c');
+                log_print(t('cors_reflects', $label, $acao) . "\n", 'c');
             }
         } else {
-            log_print("[OK] $label: ACAO=$acao" . ($creds ? " (Credentials=true)" : "") . "\n", 'c');
+            log_print(t('cors_ok', $label, $acao) . ($creds ? " (Credentials=true)" : "") . "\n", 'c');
         }
     }
     log_print("\n", 'c');
@@ -1550,11 +2067,11 @@ sub _fetch_page {
 # HTTPS / TLS scan (new in v3)
 # --------------------------------------------------------------------------
 sub https_scan {
-    log_print("HTTPS / TLS scan (port 443)\n", 'h');
+    log_print(t('https_header') . "\n", 'h');
     log_print("---------------------------\n", 'h');
 
     unless ($ssl_available) {
-        log_print("IO::Socket::SSL not installed - install with: cpan IO::Socket::SSL\n\n", 'i');
+        log_print(t('no_ssl_module') . "\n\n", 'i');
         return;
     }
 
@@ -1570,7 +2087,7 @@ sub https_scan {
     );
 
     if (!$sock) {
-        log_print("No HTTPS on port 443\n\n", 'i');
+        log_print(t('no_https') . "\n\n", 'i');
         return;
     }
 
@@ -1586,17 +2103,17 @@ sub https_scan {
     my $alpn = eval { $sock->alpn_selected() } // 'http/1.1';
     my $http_ver = ($alpn eq 'h2') ? 'HTTP/2' : 'HTTP/1.1';
 
-    log_print("TLS version:  $tls_ver\n", 'c');
-    log_print("HTTP version: $http_ver\n", 'c');
-    log_print("Cipher suite: $cipher\n", 'c');
-    log_print("Certificate:  $cert_cn\n", 'c');
+    log_print(t('tls_version', $tls_ver) . "\n", 'c');
+    log_print(t('http_version', $http_ver) . "\n", 'c');
+    log_print(t('tls_cipher', $cipher) . "\n", 'c');
+    log_print(t('tls_cert', $cert_cn) . "\n", 'c');
 
     # Issuer / self-signed detection
     if ($issuer) {
         my ($issuer_cn) = $issuer =~ /CN=([^,\/]+)/;
-        log_print("Issuer:       " . ($issuer_cn // $issuer) . "\n", 'c');
+        log_print(t('tls_issuer', $issuer_cn // $issuer) . "\n", 'c');
         if ($subject && $issuer eq $subject) {
-            log_print("[!] Self-signed certificate!\n", 'c');
+            log_print(t('tls_self_signed') . "\n", 'c');
         }
     }
 
@@ -1607,32 +2124,32 @@ sub https_scan {
         for (my $i = 0; $i < $#sans_flat; $i += 2) {
             push @dns_sans, $sans_flat[$i+1] if $sans_flat[$i] == 2;
         }
-        log_print("SANs:         " . join(', ', @dns_sans) . "\n", 'c') if @dns_sans;
+        log_print(t('tls_sans', join(', ', @dns_sans)) . "\n", 'c') if @dns_sans;
     }
 
     # Certificate expiry
     if ($not_after) {
-        log_print("Valid until:  $not_after\n", 'c');
+        log_print(t('tls_valid_until', $not_after) . "\n", 'c');
         my $days = _cert_days_remaining($not_after);
         if    (!defined $days)  { }
-        elsif ($days < 0)       { log_print("[CRITICAL] Certificate EXPIRED " . abs($days) . " days ago!\n", 'c') }
-        elsif ($days < 14)      { log_print("[CRITICAL] Certificate expires in $days days!\n", 'c') }
-        elsif ($days < 30)      { log_print("[HIGH] Certificate expires in $days days!\n", 'c') }
-        elsif ($days < 90)      { log_print("[!] Certificate expires in $days days\n", 'c') }
-        else                    { log_print("[OK] $days days remaining\n", 'c') }
+        elsif ($days < 0)       { log_print(t('tls_expired', abs($days)) . "\n", 'c') }
+        elsif ($days < 14)      { log_print(t('tls_days_high', $days) . "\n", 'c') }
+        elsif ($days < 30)      { log_print(t('tls_days_high', $days) . "\n", 'c') }
+        elsif ($days < 90)      { log_print(t('tls_days_warn', $days) . "\n", 'c') }
+        else                    { log_print(t('tls_days_ok', $days) . "\n", 'c') }
     }
 
     # TLS version warnings
     if ($tls_ver =~ /SSLv|TLSv1\.0|TLSv1\.1/) {
-        log_print("[!] Deprecated TLS version ($tls_ver) - TLS 1.2+ required!\n", 'c');
+        log_print(t('tls_deprecated', $tls_ver) . "\n", 'c');
     } elsif ($tls_ver =~ /TLSv1_3|TLSv1\.3/) {
-        log_print("[OK] TLS 1.3\n", 'c');
+        log_print(t('tls_ok_13') . "\n", 'c');
     } elsif ($tls_ver =~ /TLSv1_2|TLSv1\.2/) {
-        log_print("[OK] TLS 1.2\n", 'c');
+        log_print(t('tls_ok_12') . "\n", 'c');
     }
 
     if ($cipher =~ /RC4|DES\b|NULL|EXPORT|MD5/i) {
-        log_print("[!] Weak cipher suite ($cipher)\n", 'c');
+        log_print(t('tls_weak_cipher', $cipher) . "\n", 'c');
     }
 
     print $sock "HEAD / HTTP/1.1\r\nHost: $host_hdr\r\nConnection: close\r\n\r\n";
@@ -1670,7 +2187,7 @@ sub email_security {
     my $domain = _base_domain($host) || $host;
     return unless $domain;
 
-    log_print("Email Security: $domain\n", 'h');
+    log_print(t('email_header', $domain) . "\n", 'h');
     log_print("-" x (16 + length $domain) . "\n", 'h');
 
     # --- SPF ---
@@ -1682,11 +2199,11 @@ sub email_security {
         (my $spf = $spf_recs[0]) =~ s/"\s*"//g;
         $spf =~ s/^"|"$//g; chomp $spf;
         log_print("SPF:   $spf\n", 'c');
-        if    ($spf =~ /\-all/) { log_print("       [OK] -all: unauthorized senders rejected\n", 'c') }
-        elsif ($spf =~ /\~all/) { log_print("       [~]  ~all: soft fail, marked as spam\n", 'c') }
-        elsif ($spf =~ /\?all|\+all/) { log_print("       [!]  +all/?all: allows spoofing!\n", 'c') }
+        if    ($spf =~ /\-all/) { log_print(t('spf_ok') . "\n", 'c') }
+        elsif ($spf =~ /\~all/) { log_print(t('spf_soft') . "\n", 'c') }
+        elsif ($spf =~ /\?all|\+all/) { log_print(t('spf_weak') . "\n", 'c') }
     } else {
-        log_print("SPF:   [!] No SPF record — domain can be spoofed!\n", 'c');
+        log_print(t('spf_missing') . "\n", 'c');
     }
     SKIP_SPF:
 
@@ -1699,12 +2216,12 @@ sub email_security {
         (my $dmarc = $dm_recs[0]) =~ s/"\s*"//g;
         $dmarc =~ s/^"|"$//g; chomp $dmarc;
         log_print("DMARC: $dmarc\n", 'c');
-        if    ($dmarc =~ /p=reject/i)     { log_print("       [OK] p=reject: spoofed mail rejected\n", 'c') }
-        elsif ($dmarc =~ /p=quarantine/i) { log_print("       [~]  p=quarantine: spoofed mail → spam\n", 'c') }
-        elsif ($dmarc =~ /p=none/i)       { log_print("       [!]  p=none: monitoring only, no enforcement!\n", 'c') }
+        if    ($dmarc =~ /p=reject/i)     { log_print(t('dmarc_reject') . "\n", 'c') }
+        elsif ($dmarc =~ /p=quarantine/i) { log_print(t('dmarc_quarantine') . "\n", 'c') }
+        elsif ($dmarc =~ /p=none/i)       { log_print(t('dmarc_none') . "\n", 'c') }
         if ($dmarc =~ /rua=([^;]+)/i)     { log_print("       Reports: $1\n", 'c') }
     } else {
-        log_print("DMARC: [!] No DMARC record found!\n", 'c');
+        log_print(t('dmarc_missing') . "\n", 'c');
     }
     SKIP_DMARC:
 
@@ -1712,7 +2229,7 @@ sub email_security {
     my @selectors = qw(default google mail dkim k1 s1 s2
                        selector1 selector2 smtp mx email
                        dkim1 key1 key2 mimecast);
-    log_print("DKIM:  Testing " . scalar(@selectors) . " common selectors...\n", 'h');
+    log_print(t('dkim_testing', scalar(@selectors)) . "\n", 'h');
     my $dkim_found = 0;
     for my $sel (@selectors) {
         open(my $dk_fh, '-|', 'dig', '+short', 'TXT', "$sel._domainkey.$domain") or next;
@@ -1721,20 +2238,20 @@ sub email_security {
         if (@dk) {
             my $rec = $dk[0]; chomp $rec; $rec =~ s/"\s*"//g; $rec =~ s/^"|"$//g;
             my $short = length($rec) > 80 ? substr($rec,0,80).'...' : $rec;
-            log_print("DKIM:  [OK] selector '$sel': $short\n", 'c');
+            log_print(t('dkim_found', $sel, $short) . "\n", 'c');
             $dkim_found++;
         }
     }
-    log_print("DKIM:  [!] No DKIM records found for common selectors\n", 'c') unless $dkim_found;
+    log_print(t('dkim_missing') . "\n", 'c') unless $dkim_found;
 
     # --- MTA-STS (bonus) ---
     open(my $mta_fh, '-|', 'dig', '+short', 'TXT', "_mta-sts.$domain") or goto DONE_EMAIL;
     my @mta = grep { /v=STSv1/i } <$mta_fh>;
     close $mta_fh;
     if (@mta) {
-        log_print("MTA-STS: [OK] configured\n", 'c');
+        log_print(t('mta_sts_ok') . "\n", 'c');
     } else {
-        log_print("MTA-STS: [i] not configured (optional but recommended)\n", 'i');
+        log_print(t('mta_sts_miss') . "\n", 'i');
     }
     DONE_EMAIL:
 
@@ -1747,11 +2264,11 @@ sub email_security {
 sub geolocation {
     return unless check_ip($target);
 
-    log_print("Geolocation for $target\n", 'h');
+    log_print(t('geo_header', $target) . "\n", 'h');
     log_print("-----------------------\n", 'h');
 
     if (is_private_ip($target)) {
-        log_print("Private/reserved address, skipping geolocation\n\n", 'i');
+        log_print(t('geo_private') . "\n\n", 'i');
         return;
     }
 
@@ -1761,7 +2278,7 @@ sub geolocation {
     );
 
     if (!$sock) {
-        log_print("Cannot reach ip-api.com\n\n", 'i');
+        log_print(t('geo_no_reach') . "\n\n", 'i');
         return;
     }
 
@@ -1806,7 +2323,7 @@ sub _ssl_read {
 
 # --------------------------------------------------------------------------
 sub port_scan {
-    log_print("Port scan\n", 'h');
+    log_print(t('port_header') . "\n", 'h');
     log_print("---------\n", 'h');
 
     my %services = (
@@ -1836,7 +2353,7 @@ sub port_scan {
             close $sock;
         }
     }
-    log_print("No common ports open\n", 'i') unless @open_ports;
+    log_print(t('no_open_ports') . "\n", 'i') unless @open_ports;
     log_print("\n", 'c');
     $json_results{open_ports} = \@open_ports;
 }
@@ -1845,7 +2362,7 @@ sub port_scan {
 # OS Detection — HTTP headers + SSH/FTP banners + Nmap (new in v3)
 # --------------------------------------------------------------------------
 sub os_detect {
-    log_print("OS Detection\n", 'h');
+    log_print(t('os_header') . "\n", 'h');
     log_print("------------\n", 'h');
 
     my @hints;
@@ -1888,7 +2405,7 @@ sub os_detect {
         log_print("$_\n", 'c') for @unique;
         $json_results{os_hints} = \@unique;
     } else {
-        log_print("No OS indicators found\n", 'i');
+        log_print(t('os_none') . "\n", 'i');
     }
     log_print("\n", 'c');
 }
@@ -2020,7 +2537,7 @@ sub _os_from_ping_ttl {
               : $orig == 128 ? 'Windows'
               :                'Linux / Unix / macOS';
 
-    return "$guess  [ping TTL=$ttl, orig=$orig, ~$hops hops]";
+    return t('ping_ttl', $guess, $ttl, $orig, $hops);
 }
 
 sub _os_from_open_ports {
@@ -2101,9 +2618,9 @@ sub _os_from_nmap {
         $nmap //= '';
     }
     unless ($nmap && -x $nmap) {
-        log_print("Nmap not installed - skipping TCP/IP stack fingerprint\n", 'i');
-        log_print("  Install: sudo apt install nmap   (Debian/Ubuntu/Raspberry Pi OS)\n", 'i');
-        log_print("  For full OS detection run as root: sudo perl hackbot2 -n <host>\n", 'i');
+        log_print(t('nmap_not_found') . "\n", 'i');
+        log_print(t('nmap_install') . "\n", 'i');
+        log_print(t('nmap_root_hint') . "\n", 'i');
         return ();
     }
 
@@ -2112,10 +2629,10 @@ sub _os_from_nmap {
 
     if ($is_root) {
         push @cmd, '-O', '--osscan-guess';
-        log_print("Running nmap OS scan (root)...\n", 'h');
+        log_print(t('nmap_root_mode') . "\n", 'h');
     } else {
         push @cmd, '-sV', '--version-intensity', '5';
-        log_print("Running nmap -sV (install nmap + run as root for full -O OS detection)...\n", 'h');
+        log_print(t('nmap_sv_mode') . "\n", 'h');
     }
     push @cmd, $target;
 
@@ -2159,7 +2676,7 @@ sub _os_from_nmap {
 # Service Banner Grabbing (new in v3)
 # --------------------------------------------------------------------------
 sub service_banners {
-    log_print("Service Banner Scan\n", 'h');
+    log_print(t('svc_header') . "\n", 'h');
     log_print("-------------------\n", 'h');
 
     # Plain-text banner services: just connect and read
@@ -2308,7 +2825,7 @@ sub service_banners {
         }
     }
 
-    log_print("Service banner scan complete\n\n", 'i');
+    log_print(t('svc_complete') . "\n\n", 'i');
 }
 
 sub _banner_first_line {
@@ -2324,11 +2841,11 @@ sub _banner_first_line {
 sub spamcheck {
     return unless check_ip($target);
 
-    log_print("DNSBL Spam Check\n", 'h');
+    log_print(t('dnsbl_header') . "\n", 'h');
     log_print("----------------\n", 'h');
 
     if (is_private_ip($target)) {
-        log_print("Private address, skipping DNSBL check\n\n", 'i');
+        log_print(t('dnsbl_private') . "\n\n", 'i');
         return;
     }
 
@@ -2347,9 +2864,9 @@ sub spamcheck {
         my ($bl, $name) = @$list;
         my $listed = gethost("$rev.$bl");
         if ($listed) {
-            log_print("LISTED on $name\n", 'c');
+            log_print(t('dnsbl_listed', $name) . "\n", 'c');
         } else {
-            log_print("Clean on $name\n", 'i');
+            log_print(t('dnsbl_clean', $name) . "\n", 'i');
         }
     }
     log_print("\n", 'c');
@@ -2359,11 +2876,11 @@ sub spamcheck {
 # Telnet fingerprint
 # --------------------------------------------------------------------------
 sub telnetfprint {
-    log_print("Telnet fingerprint\n", 'h');
+    log_print(t('telnet_header') . "\n", 'h');
     log_print("------------------\n", 'h');
 
     unless (-e $fp_db) {
-        log_print("Fingerprint database not found ($fp_db), skipping\n\n", 'c');
+        log_print(t('telnet_no_db', $fp_db) . "\n\n", 'c');
         return;
     }
 
@@ -2373,7 +2890,7 @@ sub telnetfprint {
     );
 
     if (!$sock) {
-        log_print("No telnet\n\n", 'i');
+        log_print(t('no_telnet') . "\n\n", 'i');
         return;
     }
 
@@ -2390,7 +2907,7 @@ sub telnetfprint {
     close $sock;
 
     return unless $fingerprint;
-    log_print("Fingerprint: $fingerprint\n", 'c');
+    log_print(t('telnet_fp', $fingerprint) . "\n", 'c');
 
     open(my $fh, '<', $fp_db) or return;
     my $hit;
@@ -2398,19 +2915,19 @@ sub telnetfprint {
         chomp;
         my ($desc, $fp, $submitter) = split(/!/, $_, 3);
         if ($fp && $fingerprint eq $fp) {
-            log_print("OS guess: $desc (submitted by $submitter)\n\n", 'c');
+            log_print(t('telnet_os', $desc, $submitter) . "\n\n", 'c');
             $hit = 1;
         }
     }
     close $fh;
-    log_print("Fingerprint not in database\n\n", 'c') unless $hit;
+    log_print(t('telnet_not_found') . "\n\n", 'c') unless $hit;
 }
 
 # --------------------------------------------------------------------------
 # Identd scan
 # --------------------------------------------------------------------------
 sub ident_scan {
-    log_print("Identd\n", 'h');
+    log_print(t('ident_header') . "\n", 'h');
     log_print("------\n", 'h');
 
     my $sock = IO::Socket::INET->new(
@@ -2419,7 +2936,7 @@ sub ident_scan {
     );
 
     if (!$sock) {
-        log_print("No Identd on $target, skipping full scan\n\n", 'i');
+        log_print(t('ident_none', $target) . "\n\n", 'i');
         return;
     }
 
@@ -2427,7 +2944,7 @@ sub ident_scan {
     print $sock "113,$lp\r\n";
     sysread($sock, my $buff, 256);
     my (undef, undef, undef, $owner) = split(/:/, $buff // '');
-    log_print("Port\tState\tService\tOwner\n", 'h');
+    log_print(t('ident_col') . "\n", 'h');
     log_print("----\t-----\t-------\t-----\n", 'h');
     log_print("113\tOpen\tident\t$owner", 'c') if $owner;
     close $sock;
@@ -2473,7 +2990,7 @@ sub full_identd_scan {
 # Whois lookup
 # --------------------------------------------------------------------------
 sub whois_lookup {
-    log_print("Whois lookup\n", 'h');
+    log_print(t('whois_header') . "\n", 'h');
     log_print("------------\n", 'h');
 
     return if is_private_ip($target);
@@ -2537,7 +3054,7 @@ sub _print_whois_fields {
 }
 
 sub ripe_whois {
-    log_print("Whois \@RIPE\n", 'h');
+    log_print(t('whois_ripe') . "\n", 'h');
     log_print("-----------\n", 'h');
     my $buff = _whois_query('whois.ripe.net', $target);
     _print_whois_fields($buff,
@@ -2551,7 +3068,7 @@ sub ripe_whois {
 }
 
 sub arin_whois {
-    log_print("Whois \@ARIN\n", 'h');
+    log_print(t('whois_arin') . "\n", 'h');
     log_print("-----------\n", 'h');
     my $buff = _whois_query('whois.arin.net', $target, 5120);
     _print_whois_fields($buff,
@@ -2565,7 +3082,7 @@ sub arin_whois {
 }
 
 sub apnic_whois {
-    log_print("Whois \@APNIC\n", 'h');
+    log_print(t('whois_apnic') . "\n", 'h');
     log_print("------------\n", 'h');
     my $buff = _whois_query('whois.apnic.net', $target);
     _print_whois_fields($buff,
@@ -2582,7 +3099,7 @@ sub apnic_whois {
 # X11 check  (Bug fix v3: alarm() prevents hang)
 # --------------------------------------------------------------------------
 sub xcheck {
-    log_print("X11 access check (port 6000)\n", 'h');
+    log_print(t('x11_header') . "\n", 'h');
     log_print("----------------------------\n", 'h');
 
     my $sock = IO::Socket::INET->new(
@@ -2591,7 +3108,7 @@ sub xcheck {
     );
 
     if (!$sock) {
-        log_print("No X11\n\n", 'i');
+        log_print(t('no_x11') . "\n\n", 'i');
         return;
     }
 
@@ -2607,9 +3124,9 @@ sub xcheck {
     close $sock;
 
     if ($buff && $buff !~ /protocol|autho/i) {
-        log_print("X11 access ALLOWED - no authentication required!\n\n", 'c');
+        log_print(t('x11_allowed') . "\n\n", 'c');
     } else {
-        log_print("X11 access not allowed\n\n", 'i');
+        log_print(t('x11_denied') . "\n\n", 'i');
     }
 }
 
@@ -2624,21 +3141,21 @@ sub proxytest {
         Proto => 'tcp', Timeout => $opt{T} * 2,
     );
     unless ($sock) {
-        log_print("Proxy connect failed, scanning without proxy\n\n", 'c');
+        log_print(t('proxy_noconnect') . "\n\n", 'c');
         undef $proxy; undef $proxyport;
         return;
     }
 
-    log_print("Proxy responds, testing...\n\n", 'c');
+    log_print(t('proxy_test') . "\n\n", 'c');
     print $sock "GET http://$tgt/_probe_ HTTP/1.0\r\n\r\n";
     sleep(3);
     sysread($sock, my $buff, 1024);
     close $sock;
 
     if ($buff && $buff =~ /404/) {
-        log_print("Proxying allowed\n\n", 'c');
+        log_print(t('proxy_ok') . "\n\n", 'c');
     } else {
-        log_print("Proxying not allowed, continuing without proxy\n\n", 'c');
+        log_print(t('proxy_fail') . "\n\n", 'c');
         undef $proxy; undef $proxyport;
     }
 }
@@ -2734,7 +3251,7 @@ sub output_json {
     open(my $fh, '>', $out) or warn "Cannot write JSON to $out: $!\n";
     print $fh JSON::PP->new->pretty->encode(\%json_results);
     close $fh;
-    print "JSON results written to $out\n";
+    print t('json_written', $out) . "\n";
 }
 
 # --------------------------------------------------------------------------

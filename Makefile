@@ -11,6 +11,7 @@ install:
 	install -m 644 cgi.db          $(ETCDIR)/cgi.db
 	install -m 644 fingerprint.db  $(ETCDIR)/fingerprint.db
 	install -m 644 disclosure.db   $(ETCDIR)/disclosure.db
+	install -m 644 hackbot2.conf   $(ETCDIR)/hackbot2.conf
 	@echo "Done. Run: hackbot2 --help"
 
 uninstall:

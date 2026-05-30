@@ -4,6 +4,15 @@
 Complete modernization of HackBot 2.15.
 GitHub: https://github.com/Thielander/hackbot2
 
+### Internationalisation (i18n)
+- Full bilingual support: **English** (default) and **German**
+- `~/.hackbot2rc` config file: set `lang=de` to switch to German
+- `hackbot2.conf` sample config included in repository
+- Translation system: `t('key', args...)` with `{1}` placeholders
+- All ~250 user-facing strings translated (section headers, status messages, warnings, findings)
+- Raw data (server banners, DNS records, IPs) always displayed as-is
+- Additional languages can be added to the `%LANG` hash
+
 ### Security fixes
 - Added `use strict; use warnings;` — all variables now lexically scoped
 - All `open()` calls converted to 3-argument form (prevents injection)
