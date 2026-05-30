@@ -1,0 +1,235 @@
+# HackBot2 Disclosure Database
+# Format: path!category!severity!description
+# severity: INFO LOW MEDIUM HIGH CRITICAL
+# -----------------------------------------------------------------------
+
+# -----------------------------------------------------------------------
+# AI / Bots / Crawler Disclosure (new standards 2024-2025)
+# -----------------------------------------------------------------------
+/robots.txt!disclosure!INFO!Crawler directives - may reveal hidden paths
+/llms.txt!disclosure!INFO!LLM access policy (ai.robots.txt standard 2024)
+/ai.txt!disclosure!INFO!AI crawler policy
+/.well-known/ai-plugin.json!disclosure!INFO!OpenAI plugin manifest - reveals API structure
+/.well-known/openai.json!disclosure!INFO!OpenAI configuration
+
+# -----------------------------------------------------------------------
+# Security / Responsible Disclosure
+# -----------------------------------------------------------------------
+/.well-known/security.txt!disclosure!INFO!Security contact info (RFC 9116)
+/security.txt!disclosure!INFO!Security contact info (fallback path)
+/.well-known/change-password!disclosure!INFO!Password change URL hint
+/humans.txt!disclosure!INFO!Credits file - may reveal tech stack or staff names
+/ads.txt!disclosure!INFO!Authorized ad sellers list
+
+# -----------------------------------------------------------------------
+# Sitemaps / Discovery
+# -----------------------------------------------------------------------
+/sitemap.xml!disclosure!INFO!Sitemap - reveals all public URLs
+/sitemap_index.xml!disclosure!INFO!Sitemap index
+/sitemap.xml.gz!disclosure!INFO!Compressed sitemap
+/feed/!disclosure!INFO!RSS/Atom feed
+/feed.xml!disclosure!INFO!RSS/Atom feed
+/atom.xml!disclosure!INFO!Atom feed
+/rss.xml!disclosure!INFO!RSS feed
+/.well-known/host-meta!disclosure!INFO!Host metadata (WebFinger)
+
+# -----------------------------------------------------------------------
+# Environment / Config Files — CRITICAL
+# -----------------------------------------------------------------------
+/.env!config!CRITICAL!Environment file - may contain DB credentials, API keys, secrets
+/.env.local!config!CRITICAL!Local environment overrides
+/.env.production!config!CRITICAL!Production environment file
+/.env.staging!config!CRITICAL!Staging environment file
+/.env.development!config!CRITICAL!Development environment file
+/.env.backup!config!CRITICAL!Environment file backup
+/.env.bak!config!CRITICAL!Environment file backup
+/.env.old!config!CRITICAL!Old environment file
+/.env.save!config!CRITICAL!Saved environment file
+/.env.dist!config!HIGH!Environment template - may reveal variable names
+/.env.example!config!MEDIUM!Environment example - reveals expected variables
+
+# -----------------------------------------------------------------------
+# CMS / Framework Config Files — CRITICAL
+# -----------------------------------------------------------------------
+/wp-config.php!config!CRITICAL!WordPress config - DB credentials
+/wp-config.php.bak!config!CRITICAL!WordPress config backup
+/wp-config.php.old!config!CRITICAL!WordPress config backup
+/wp-config.php~!config!CRITICAL!WordPress config editor backup
+/wp-config-sample.php!config!MEDIUM!WordPress config sample
+/configuration.php!config!CRITICAL!Joomla config - DB credentials
+/configuration.php.bak!config!CRITICAL!Joomla config backup
+/LocalSettings.php!config!CRITICAL!MediaWiki config
+/settings.php!config!CRITICAL!Drupal config
+/config.php!config!CRITICAL!Generic PHP config file
+/config/settings.inc.php!config!CRITICAL!PrestaShop database config
+/app/etc/local.xml!config!CRITICAL!Magento 1 local config
+/app/etc/env.php!config!CRITICAL!Magento 2 environment config
+/config/database.php!config!HIGH!Laravel database config
+/config/app.php!config!HIGH!Laravel app config - reveals app key
+/.htpasswd!config!HIGH!HTTP basic auth credentials
+/web.config!config!HIGH!IIS/ASP.NET config (Windows servers)
+/config.yml!config!HIGH!Generic YAML config
+/config.yaml!config!HIGH!Generic YAML config
+/config.json!config!HIGH!Generic JSON config
+/config.ini!config!HIGH!Generic INI config
+/application.properties!config!HIGH!Java Spring Boot config
+/application.yml!config!HIGH!Java Spring Boot YAML config
+/appsettings.json!config!HIGH!ASP.NET Core config
+
+# -----------------------------------------------------------------------
+# Git / Version Control — HIGH
+# -----------------------------------------------------------------------
+/.git/config!git!HIGH!Git config - may reveal remote URLs and credentials
+/.git/HEAD!git!HIGH!Git HEAD pointer - confirms .git exposure
+/.git/COMMIT_EDITMSG!git!HIGH!Last commit message
+/.gitignore!git!MEDIUM!Git ignore rules - reveals file structure
+/.gitmodules!git!MEDIUM!Git submodule config
+/.gitattributes!git!LOW!Git attributes
+/.svn/entries!git!HIGH!SVN repository metadata
+/.svn/wc.db!git!HIGH!SVN working copy database
+/.hg/hgrc!git!HIGH!Mercurial config
+/CVS/Root!git!MEDIUM!CVS repository root
+/.bzr/branch/branch.conf!git!MEDIUM!Bazaar branch config
+
+# -----------------------------------------------------------------------
+# Docker / CI/CD / DevOps — HIGH
+# -----------------------------------------------------------------------
+/docker-compose.yml!devops!HIGH!Docker Compose - reveals service architecture
+/docker-compose.yaml!devops!HIGH!Docker Compose config
+/docker-compose.override.yml!devops!HIGH!Docker Compose overrides
+/Dockerfile!devops!MEDIUM!Dockerfile - reveals base image and build steps
+/.dockerenv!devops!MEDIUM!Docker environment marker
+/.travis.yml!devops!MEDIUM!Travis CI pipeline config
+/.circleci/config.yml!devops!MEDIUM!CircleCI pipeline config
+/Jenkinsfile!devops!MEDIUM!Jenkins pipeline config
+/.github/workflows/deploy.yml!devops!MEDIUM!GitHub Actions deployment workflow
+/kubernetes.yml!devops!HIGH!Kubernetes deployment config
+/k8s.yml!devops!HIGH!Kubernetes config
+/terraform.tfstate!devops!CRITICAL!Terraform state - may contain credentials
+/.ansible/!devops!HIGH!Ansible config directory
+/ansible.cfg!devops!HIGH!Ansible config
+
+# -----------------------------------------------------------------------
+# Package / Dependency Files — MEDIUM
+# -----------------------------------------------------------------------
+/composer.json!package!MEDIUM!PHP dependencies - reveals framework and versions
+/composer.lock!package!MEDIUM!PHP locked dependencies with exact versions
+/package.json!package!MEDIUM!Node.js dependencies
+/package-lock.json!package!LOW!Node.js locked dependencies
+/yarn.lock!package!LOW!Yarn locked dependencies
+/requirements.txt!package!MEDIUM!Python dependencies
+/Pipfile!package!MEDIUM!Python Pipenv dependencies
+/Pipfile.lock!package!LOW!Python locked dependencies
+/Gemfile!package!MEDIUM!Ruby dependencies
+/Gemfile.lock!package!LOW!Ruby locked dependencies
+/go.mod!package!MEDIUM!Go module dependencies
+/go.sum!package!LOW!Go checksums
+/Cargo.toml!package!MEDIUM!Rust dependencies
+/pom.xml!package!MEDIUM!Maven dependencies (Java)
+/build.gradle!package!MEDIUM!Gradle build file (Java/Kotlin)
+
+# -----------------------------------------------------------------------
+# API Documentation — MEDIUM
+# -----------------------------------------------------------------------
+/swagger.json!api!MEDIUM!Swagger/OpenAPI spec - full API documentation
+/swagger.yaml!api!MEDIUM!Swagger/OpenAPI YAML spec
+/openapi.json!api!MEDIUM!OpenAPI 3.x spec
+/openapi.yaml!api!MEDIUM!OpenAPI 3.x YAML spec
+/api-docs!api!MEDIUM!API documentation endpoint
+/api-docs/!api!MEDIUM!API documentation directory
+/api/swagger.json!api!MEDIUM!API Swagger spec
+/v1/swagger.json!api!MEDIUM!API v1 Swagger spec
+/v2/swagger.json!api!MEDIUM!API v2 Swagger spec
+/v3/swagger.json!api!MEDIUM!API v3 Swagger spec
+/.well-known/jwks.json!api!HIGH!JSON Web Key Set - JWT public keys
+/graphql!api!MEDIUM!GraphQL endpoint - check for introspection
+/graphiql!api!MEDIUM!GraphQL IDE interface (should not be public)
+/playground!api!MEDIUM!GraphQL Playground (should not be public)
+/manifest.json!api!LOW!Web app manifest
+/manifest.webmanifest!api!LOW!Web app manifest
+
+# -----------------------------------------------------------------------
+# Database / Backup Files — CRITICAL
+# -----------------------------------------------------------------------
+/backup.sql!backup!CRITICAL!SQL database dump
+/dump.sql!backup!CRITICAL!SQL dump
+/database.sql!backup!CRITICAL!SQL database export
+/db.sql!backup!CRITICAL!SQL dump
+/backup.zip!backup!CRITICAL!Site backup archive
+/backup.tar.gz!backup!CRITICAL!Site backup tarball
+/backup.tar.bz2!backup!CRITICAL!Site backup archive
+/site.zip!backup!CRITICAL!Site backup
+/www.zip!backup!CRITICAL!Web root backup
+/htdocs.zip!backup!CRITICAL!Web root backup
+/public_html.zip!backup!CRITICAL!Web root backup
+/website.zip!backup!CRITICAL!Website backup
+/wordpress.zip!backup!CRITICAL!WordPress backup
+/wp-content.zip!backup!HIGH!WordPress content backup
+/uploads.zip!backup!HIGH!Upload directory backup
+/data.zip!backup!HIGH!Data backup
+
+# -----------------------------------------------------------------------
+# Log Files — HIGH
+# -----------------------------------------------------------------------
+/logs/!log!HIGH!Log directory - may reveal errors, user data, paths
+/log/!log!HIGH!Log directory
+/error.log!log!HIGH!Apache/Nginx error log
+/access.log!log!HIGH!HTTP access log - all requests
+/debug.log!log!HIGH!Debug log - may contain stack traces
+/application.log!log!HIGH!Application log
+/storage/logs/laravel.log!log!HIGH!Laravel application log
+/var/log/nginx/error.log!log!HIGH!Nginx error log path (misconfigured server)
+/php_error.log!log!HIGH!PHP error log
+/install.log!log!MEDIUM!Installation log
+
+# -----------------------------------------------------------------------
+# Admin / Control Panel Interfaces — MEDIUM/HIGH
+# -----------------------------------------------------------------------
+/admin/!admin!HIGH!Admin panel
+/admin!admin!HIGH!Admin panel
+/administrator/!admin!HIGH!Joomla admin interface
+/wp-admin/!admin!MEDIUM!WordPress admin interface
+/wp-login.php!admin!MEDIUM!WordPress login page
+/xmlrpc.php!admin!MEDIUM!WordPress XML-RPC (brute-force vector)
+/phpmyadmin/!admin!HIGH!phpMyAdmin database admin
+/pma/!admin!HIGH!phpMyAdmin alias
+/phpmyadmin!admin!HIGH!phpMyAdmin
+/adminer.php!admin!HIGH!Adminer database admin
+/adminer/!admin!HIGH!Adminer database admin
+/panel/!admin!MEDIUM!Generic admin panel
+/dashboard/!admin!MEDIUM!Dashboard
+/cpanel/!admin!HIGH!cPanel hosting admin
+/webmail/!admin!MEDIUM!Webmail interface
+
+# -----------------------------------------------------------------------
+# Server Status / Monitoring — MEDIUM
+# -----------------------------------------------------------------------
+/server-status!monitor!HIGH!Apache mod_status - all active connections
+/server-info!monitor!HIGH!Apache mod_info - full server config
+/status!monitor!MEDIUM!Generic status endpoint
+/health!monitor!LOW!Health check endpoint
+/healthz!monitor!LOW!Kubernetes health check
+/readyz!monitor!LOW!Kubernetes readiness check
+/metrics!monitor!MEDIUM!Prometheus metrics - may reveal internals
+/actuator!monitor!HIGH!Spring Boot Actuator - all endpoints
+/actuator/env!monitor!CRITICAL!Spring Boot env - all environment variables
+/actuator/health!monitor!MEDIUM!Spring Boot health
+/actuator/metrics!monitor!MEDIUM!Spring Boot metrics
+/actuator/mappings!monitor!HIGH!Spring Boot URL mappings
+/.well-known/healthcheck!monitor!LOW!Healthcheck endpoint
+/nginx_status!monitor!MEDIUM!Nginx stub status
+
+# -----------------------------------------------------------------------
+# Exposed Development/Debug Files — HIGH
+# -----------------------------------------------------------------------
+/info.php!debug!HIGH!PHP info page - full server configuration leak
+/phpinfo.php!debug!HIGH!PHP info page
+/test.php!debug!MEDIUM!PHP test page
+/debug!debug!HIGH!Debug interface
+/console!debug!HIGH!Debug console (Rails, Laravel Telescope, etc.)
+/telescope!debug!HIGH!Laravel Telescope debug interface
+/horizon!debug!MEDIUM!Laravel Horizon queue monitor
+/_profiler!debug!HIGH!Symfony profiler
+/_profiler/!debug!HIGH!Symfony profiler directory
+/clockwork!debug!MEDIUM!Clockwork PHP debugger
+/.well-known/assetlinks.json!debug!LOW!Android app link verification
