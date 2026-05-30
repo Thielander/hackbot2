@@ -121,7 +121,7 @@ HACKBOT_DB=/path/to/cgi.db HACKBOT_FPDB=/path/to/fingerprint.db hackbot2 -A exam
 
 ## Credits
 
-Originally written by:
+Originally written by *(addresses are from 2000–2002 and likely no longer active)*:
 
 - **Marco van Berkum** — m.v.berkum@obit.nl
 - **Kristian Vlaardingerbroek** — kris@obit.nl
